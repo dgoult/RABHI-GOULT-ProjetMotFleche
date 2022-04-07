@@ -2,7 +2,6 @@ package model;
 
 public interface Case {
 
-    public int getPosition() {
-        return this
-    }
+     Coordonnee getCoordonnee();
+     Coordonnee setCoordonnee(Coordonnee nouvelleCoordonnee);
 }
