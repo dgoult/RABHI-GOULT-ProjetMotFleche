@@ -1,3 +1,5 @@
+package model;
+
 public class Grille {
     private int hauteur;
     private int largeur;
