@@ -1,8 +1,11 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Grille {
     private int hauteur;
     private int largeur;
+    ArrayList<Mot> mots;
 
     public Grille(int hauteur, int largeur) {
         this.hauteur = hauteur;
