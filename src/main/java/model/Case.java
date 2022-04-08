@@ -3,5 +3,5 @@ package model;
 public interface Case {
 
      Coordonnee getCoordonnee();
-     Coordonnee setCoordonnee(Coordonnee nouvelleCoordonnee);
+     void setCoordonnee(Coordonnee nouvelleCoordonnee);
 }
