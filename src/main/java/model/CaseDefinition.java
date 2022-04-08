@@ -1,30 +1,29 @@
 package model;
 
+import enumeration.Dir;
+
 import java.awt.*;
 
 public class CaseDefinition implements Case {
 
-    Direction direction;
-    Coordonnee coordonnee;
+    Dir direction;
+    Coordonnee coordonneeDef;
     String definition;
     int nbMot = 1;
 
-    public CaseDefinition(Coordonnee coordonnee, int nbMot) {
-        this.coordonnee = coordonnee;
+    public CaseDefinition(Coordonnee coordonneeDef, int nbMot) {
+        this.coordonneeDef = coordonneeDef;
         this.nbMot = nbMot;
     }
 
     @Override
     public Coordonnee getCoordonnee() {
-        return this.coordonnee;
+        return this.coordonneeDef;
     }
 
     @Override
     public Coordonnee setCoordonnee(Coordonnee nouvelleCoordonnee) {
-        this.coordonnee = nouvelleCoordonnee;
+       return this.coordonneeDef = nouvelleCoordonnee;
     }
-
-
-
 
 }

@@ -18,4 +18,8 @@ public class Coordonnee {
         return posX;
     }
 
+    public void getCoordonnee() {
+
+    }
+
 }
