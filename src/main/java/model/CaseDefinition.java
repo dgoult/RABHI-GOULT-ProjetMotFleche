@@ -1,10 +1,12 @@
 package model;
 
+import enumeration.Dir;
+
 import java.awt.*;
 
 public class CaseDefinition implements Case {
 
-    Direction direction;
+    Dir direction;
     Coordonnee coordonnee;
     String definition;
     int nbMot = 1;
@@ -21,10 +23,7 @@ public class CaseDefinition implements Case {
 
     @Override
     public Coordonnee setCoordonnee(Coordonnee nouvelleCoordonnee) {
-        this.coordonnee = nouvelleCoordonnee;
+       return this.coordonnee = nouvelleCoordonnee;
     }
-
-
-
 
 }
