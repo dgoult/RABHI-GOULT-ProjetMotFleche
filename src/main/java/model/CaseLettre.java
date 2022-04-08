@@ -1,6 +1,5 @@
 package model;
 
-public class CaseLettre implements Case {
-
-
+public abstract class CaseLettre implements Case {
+//TODO: faire la classe case lettre
 }
