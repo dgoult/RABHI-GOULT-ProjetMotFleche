@@ -2,8 +2,8 @@ package model;
 
 public class Coordonnee {
 
-    int posX;
-    int posY;
+    private int posX;
+    private int posY;
 
     public Coordonnee(int x, int y) {
         posX = x;
@@ -18,8 +18,12 @@ public class Coordonnee {
         return posX;
     }
 
-    public void getCoordonnee() {
+    public void setPosX(int x) {
+        this.posX = x;
+    }
 
+    public void setPosY(int y) {
+        this.posY = y;
     }
 
 }

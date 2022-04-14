@@ -2,15 +2,13 @@ package model;
 
 import enumeration.Dir;
 
-import java.awt.*;
-
-public class CaseDefinition extends Case {
+public class CaseDefinitionMultiple extends Case {
 
     Dir direction;
     Coordonnee coordonneeDef;
     String definition;
 
-    public CaseDefinition(Coordonnee coordonneeDef) {
+    public CaseDefinitionMultiple(Coordonnee coordonneeDef) {
         this.coordonneeDef = coordonneeDef;
     }
 

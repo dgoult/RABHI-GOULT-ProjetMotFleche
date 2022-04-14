@@ -1,7 +1,12 @@
 package model;
 
-public interface Case {
+public abstract class Case {
 
-     Coordonnee getCoordonnee();
-     void setCoordonnee(Coordonnee nouvelleCoordonnee);
+     private Coordonnee coordonneeDef;
+
+     public Coordonnee getCoordonnee() {
+          return this.coordonneeDef;
+     }
+     public void setCoordonnee(Coordonnee nouvelleCoordonnee) { this.coordonneeDef = nouvelleCoordonnee;
+     }
 }

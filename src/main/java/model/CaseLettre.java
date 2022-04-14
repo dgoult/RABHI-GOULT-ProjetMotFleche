@@ -2,24 +2,21 @@ package model;
 
 import enumeration.Dir;
 
-public abstract class CaseLettre implements Case {
-    Dir direction;
+public class CaseLettre extends Case {
     Coordonnee coordonneeLettre;
     String definition;
-    int nbMot = 1;
+    char lettre;
 
-    public CaseLettre(Coordonnee coordonneeLettre, int nbMot) {
+    public CaseLettre(Coordonnee coordonneeLettre, char lettre) {
         this.coordonneeLettre = coordonneeLettre;
-        this.nbMot = nbMot;
+        this.lettre = lettre;
     }
 
-    @Override
-    public Coordonnee getCoordonnee() {
-        return this.coordonneeLettre;
+    public void setLettre(char lettre) {
+        this.lettre = lettre;
+    }
+    public char getLettre() {
+        return this.lettre;
     }
 
-    @Override
-    public Coordonnee setCoordonnee(Coordonnee nouvelleCoordonnee) {
-        return this.coordonneeLettre = nouvelleCoordonnee;
-    }
 }
