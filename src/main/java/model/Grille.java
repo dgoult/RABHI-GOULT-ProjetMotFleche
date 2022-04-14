@@ -1,53 +1,68 @@
 package model;
 
-import java.util.ArrayList;
-
-public class Grille {
+public class Grille implements I_modeleGrille {
     private int hauteur;
     private int largeur;
-    private ArrayList<Mot> mots;
-    private int[] [] dimentionGrille;
+    private char[] [] tableauDeCases;
 
     public Grille(int hauteur, int largeur) {
         this.hauteur = hauteur;
         this.largeur = largeur;
-        this.dimentionGrille = new int[hauteur] [largeur];
+        this.tableauDeCases = new char[largeur][hauteur];
+        initTableau();
     }
 
-    public void Afficher() {
-        System.out.println("    1 2 3 4 5 6 7 8 9");
-        for(int i = dimentionGrille.length-1; i >= 0; i--){
-            System.out.print((i+1)+" | ");
-            for(int j=0; j<dimentionGrille[i].length; j++){
-                System.out.print(". ");
+    private void initTableau() {
+        for (int h = 0; h < hauteur; h++) {
+            for (int l = 0; l < largeur; l++) {
+                tableauDeCases[l][h] = '.';
             }
-            System.out.println();
         }
     }
 
-    public int[][] getDimentionGrille() {
-        return dimentionGrille;
+    public void Afficher() {
+        System.out.println("012345678");
+        for (int h = 0; h < hauteur; h++) {
+            for (int l = 0; l < largeur; l++) {
+                System.out.print(tableauDeCases[l][h]);
+            }
+            System.out.println(h);
+        }
     }
 
-    public void setDimentionGrille(int hauteur, int largeur) {
-        this.dimentionGrille = new int[hauteur] [largeur];
+    public boolean ajouterMotHorizontal(String unMot, int x , int y) {
+        if (unMot.length()+x>largeur) {
+            System.out.println("le mot : "+unMot+" est trop long");
+            return false;
+        } else {
+            for (int i=0;i < unMot.length();i++) {
+                tableauDeCases[i+x][y] = unMot.charAt(i);
+            }
+            return true;
+        }
+    }
+
+    public boolean ajouterMotVertical(String unMot, int x , int y) {
+        if (unMot.length()+x>hauteur) {
+            System.out.println("le mot : "+unMot+" est trop long");
+            return false;
+        } else {
+            for (int i=0;i < unMot.length();i++) {
+                tableauDeCases[x][i+y] = unMot.charAt(i);
+            }
+            return true;
+        }
+    }
+
+    public char[][] getTableauDeCases() {
+        return tableauDeCases;
     }
 
     public int getHauteur() {
         return hauteur;
     }
 
-    public void setHauteur(int hauteur) {
-        this.hauteur = hauteur;
-    }
-
     public int getLargeur() {
         return largeur;
     }
-
-    public void setLargeur(int largeur) {
-        this.largeur = largeur;
-    }
-
-
 }
