@@ -42,6 +42,14 @@ public class Grille implements I_modeleGrille {
             System.out.println("le mot : "+unMot+" est trop long");
             return false;
         } else {
+
+            // On check si toutes les cases sont bien vide
+            for (int i=0;i < unMot.length();i++) {
+                if (!(grilleDeCases[i+x][y] instanceof CaseVide)) {
+                    return false;
+                }
+            }
+
             for (int i=0;i < unMot.length();i++) {
                 grilleDeCases[i+x][y] = new CaseLettre(new Coordonnee(i+x, y), unMot.charAt(i)) ;
             }
@@ -54,6 +62,14 @@ public class Grille implements I_modeleGrille {
             System.out.println("le mot : "+unMot+" est trop long");
             return false;
         } else {
+
+            // On check si toutes les cases sont bien vide
+            for (int i=0;i < unMot.length();i++) {
+                if (!(grilleDeCases[x][i+y] instanceof CaseVide)) {
+                    return false;
+                }
+            }
+
             for (int i=0;i < unMot.length();i++) {
                 grilleDeCases[x][i+y] = new CaseLettre(new Coordonnee(x, i+y), unMot.charAt(i)) ;
             }
