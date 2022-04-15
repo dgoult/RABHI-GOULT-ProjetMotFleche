@@ -7,7 +7,7 @@ public class Launch {
         grille.Afficher();
         grille.ajouterMotHorizontal("totem", 0,2);
         grille.Afficher();
-        grille.ajouterMotVertical("vertica", 0, 0);
+        grille.ajouterMotVertical("obtute", 0, 0);
         grille.Afficher();
 
         GrilleGraphique grilleGraphiqueObj = new GrilleGraphique();

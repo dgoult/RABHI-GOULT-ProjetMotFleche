@@ -46,7 +46,14 @@ public class Grille implements I_modeleGrille {
             // On check si toutes les cases sont bien vide
             for (int i=0;i < unMot.length();i++) {
                 if (!(grilleDeCases[i+x][y] instanceof CaseVide)) {
-                    return false;
+                    if (grilleDeCases[i+x][y] instanceof CaseLettre) {
+                        if (((CaseLettre) grilleDeCases[i + x][y]).getLettre() != unMot.charAt(i)) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+
                 }
             }
 
@@ -66,7 +73,13 @@ public class Grille implements I_modeleGrille {
             // On check si toutes les cases sont bien vide
             for (int i=0;i < unMot.length();i++) {
                 if (!(grilleDeCases[x][i+y] instanceof CaseVide)) {
-                    return false;
+                    if (grilleDeCases[x][i+y] instanceof CaseLettre) {
+                        if (((CaseLettre) grilleDeCases[x][i+y]).getLettre() != unMot.charAt(i)) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
                 }
             }
 
