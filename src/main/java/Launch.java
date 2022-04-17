@@ -10,7 +10,7 @@ public class Launch {
         grille.ajouterMotVertical("obtute", 0, 0);
         grille.Afficher();
 
-        GrilleGraphique grilleGraphiqueObj = new GrilleGraphique(9, 9);
+        GrilleGraphique grilleGraphiqueObj = new GrilleGraphique(grille, 9, 9);
         grilleGraphiqueObj.setVisible(true);
 
     }

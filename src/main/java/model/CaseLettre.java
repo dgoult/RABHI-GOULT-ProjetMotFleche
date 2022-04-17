@@ -15,8 +15,13 @@ public class CaseLettre extends Case {
     public void setLettre(char lettre) {
         this.lettre = lettre;
     }
+
     public char getLettre() {
         return this.lettre;
+    }
+
+    public String getLettreString() {
+        return String.valueOf(this.lettre);
     }
 
 }
