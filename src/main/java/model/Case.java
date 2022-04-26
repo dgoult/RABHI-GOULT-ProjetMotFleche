@@ -2,7 +2,7 @@ package model;
 
 public abstract class Case {
 
-     private Coordonnee coordonneeDef;
+     protected Coordonnee coordonneeDef;
 
      public Coordonnee getCoordonnee() {
           return this.coordonneeDef;

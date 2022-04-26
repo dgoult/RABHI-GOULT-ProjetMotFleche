@@ -22,6 +22,9 @@ public class Grille implements I_modeleGrille {
         }
     }
 
+    /**
+     * Affiche la grille en mode console
+     */
     public void Afficher() {
         System.out.println("012345678");
         for (int h = 0; h < hauteur; h++) {
@@ -65,7 +68,7 @@ public class Grille implements I_modeleGrille {
     }
 
     public boolean ajouterMotVertical(String unMot, int x , int y) {
-        if (unMot.length()+x>hauteur) {
+        if (unMot.length()+y>hauteur) {
             System.out.println("le mot : "+unMot+" est trop long");
             return false;
         } else {
