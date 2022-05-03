@@ -1,8 +1,6 @@
 package model;
 
-import exception.GrilleException;
-
-import java.util.ArrayList;
+import enumeration.Dir;
 
 public class Grille implements I_modeleGrille {
     private int hauteur;
@@ -12,16 +10,30 @@ public class Grille implements I_modeleGrille {
     static final int MAX_HAUTEUR = 10;
     static final int MAX_LARGEUR = 10;
 
-    public Grille(int hauteur, int largeur) throws GrilleException {
+    public Grille() {
+
+    }
+
+    /**
+     * Permet d'initialiser la grille avec une hauteur et une largeur
+     * @param hauteur
+     * @param largeur
+     * @return
+     */
+    public boolean initGrille(int hauteur, int largeur) {
         if (hauteur > MAX_HAUTEUR || largeur > MAX_LARGEUR || hauteur <= 0 || largeur <= 0) {
-            throw new GrilleException();
+            return false;
         }
         this.hauteur = hauteur;
         this.largeur = largeur;
         this.grilleDeCases = new Case[largeur][hauteur];
         initTableau();
+        return true;
     }
 
+    /**
+     * Initialise le tableau de case, en le remplissant d'objet CaseVide
+     */
     private void initTableau() {
         for (int h = 0; h < hauteur; h++) {
             for (int l = 0; l < largeur; l++) {
@@ -99,6 +111,64 @@ public class Grille implements I_modeleGrille {
             }
             return true;
         }
+    }
+
+    /**
+     *
+     * @param coordonnee
+     * @return returns "CaseVide", "CaseLettre", "CaseDefinition" or "CaseDefinitionMultiple" depending on the case at the coordinate
+     */
+    public String checkCaseAt(Coordonnee coordonnee) {
+        Case caseAt = this.grilleDeCases[coordonnee.x][coordonnee.y];
+        return caseAt.getClass().getSimpleName();
+    }
+
+    public int checkAvailableCases (Coordonnee coordonnee, Dir direction) {
+        Coordonnee checkFromCase = new Coordonnee(0,0);
+        int nbCaseDispo = 0;
+
+        switch (direction) {
+            case VERTICALDIRECT -> {
+                checkFromCase.y = coordonnee.y - 1;
+                checkFromCase.x = coordonnee.x;
+            }
+            case VERTICALINDIRECT, HORIZONTALDIRECT -> {
+                checkFromCase.y = coordonnee.y;
+                checkFromCase.x = coordonnee.x + 1;
+            }
+            case HORIZONTALINDIRECT -> {
+                checkFromCase.y = coordonnee.y + 1;
+                checkFromCase.x = coordonnee.x;
+            }
+        }
+
+        if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
+            // Pour les mots horizontaux
+            for (int i = checkFromCase.y; i < this.largeur; i++) {
+                if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
+                    nbCaseDispo++;
+                } else {
+                    break;
+                }
+            }
+        } else {
+            // Pour les mots verticaux
+            for (int i = checkFromCase.x; i < this.hauteur; i++) {
+                if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
+                    nbCaseDispo++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+
+
+
+
+        return nbCaseDispo;
+
+
     }
 
     public Case[][] getTableauDeCases() {
