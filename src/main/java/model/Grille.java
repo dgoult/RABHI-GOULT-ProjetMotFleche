@@ -1,13 +1,21 @@
 package model;
 
+import exception.GrilleException;
+
 import java.util.ArrayList;
 
 public class Grille implements I_modeleGrille {
     private int hauteur;
     private int largeur;
     private Case[][] grilleDeCases;
+    private Mot[] tableauDeMots;
+    static final int MAX_HAUTEUR = 10;
+    static final int MAX_LARGEUR = 10;
 
-    public Grille(int hauteur, int largeur) {
+    public Grille(int hauteur, int largeur) throws GrilleException {
+        if (hauteur > MAX_HAUTEUR || largeur > MAX_LARGEUR || hauteur <= 0 || largeur <= 0) {
+            throw new GrilleException();
+        }
         this.hauteur = hauteur;
         this.largeur = largeur;
         this.grilleDeCases = new Case[largeur][hauteur];

@@ -3,9 +3,9 @@ package model;
 import enumeration.Dir;
 
 public class Mot {
-    private int longeur;
+    private int longueurMot;
     private Dir directionMot;
-    private int positionDepartMot;
+    private Coordonnee coordonneeDepartMot;
 
 
 
