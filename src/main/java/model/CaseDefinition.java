@@ -4,26 +4,23 @@ import enumeration.Dir;
 
 import java.awt.*;
 
-public class CaseDefinition implements Case {
+public class CaseDefinition extends Case {
 
     Dir direction;
     Coordonnee coordonneeDef;
     String definition;
-    int nbMot = 1;
 
-    public CaseDefinition(Coordonnee coordonneeDef, int nbMot) {
+    public CaseDefinition() {}
+    public CaseDefinition(Coordonnee coordonneeDef, String definition) {
         this.coordonneeDef = coordonneeDef;
-        this.nbMot = nbMot;
+        this.definition = definition;
     }
 
-    @Override
-    public Coordonnee getCoordonnee() {
-        return this.coordonneeDef;
+    public CaseDefinition(Coordonnee coordonneeDef, String definition, Dir direction) {
+        this.coordonneeDef = coordonneeDef;
+        this.definition = definition;
+        this.direction = direction;
     }
 
-    @Override
-    public Coordonnee setCoordonnee(Coordonnee nouvelleCoordonnee) {
-       return this.coordonneeDef = nouvelleCoordonnee;
-    }
 
 }
