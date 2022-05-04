@@ -9,7 +9,7 @@ public class Grille implements I_modeleGrille {
     private int hauteur;
     private int largeur;
     private Case[][] grilleDeCases;
-    private ArrayList<Mot> tableauDeMots;
+    private ArrayList<Mot> motArrayList = new ArrayList<>();
     static final int MAX_HAUTEUR = 10;
     static final int MAX_LARGEUR = 10;
 
@@ -47,19 +47,74 @@ public class Grille implements I_modeleGrille {
      * Affiche la grille en mode console
      */
     public void Afficher() {
-        System.out.println("0 1 2 3 4 5 6 7 8");
-        for (int h = 0; h < hauteur; h++) {
+        for (int i = 0; i < largeur; i++) {
+            System.out.print(i + " ");
+        }
+        System.out.print("#\n");
 
+        for (int h = 0; h < hauteur; h++) {
             for (int l = 0; l < largeur; l++) {
                 if (grilleDeCases[l][h] instanceof CaseVide) {
                     System.out.print(". ");
-                } else if (grilleDeCases[l][h] instanceof CaseLettre) {
-                    CaseLettre caseTemp = (CaseLettre) grilleDeCases[l][h];
+                } else if (grilleDeCases[l][h] instanceof CaseLettre caseTemp) {
                     System.out.print(caseTemp.getLettre() + " ");
+                } else if (grilleDeCases[l][h] instanceof CaseDefinition caseTemp) {
+                    System.out.print("1 ");
+                }  else if (grilleDeCases[l][h] instanceof CaseDefinitionMultiple caseTemp) {
+                    System.out.print("2 ");
                 }
             }
             System.out.println(h);
         }
+        System.out.print("\n");
+    }
+
+    public boolean isLettrePartOfTwoWords(Coordonnee coordonnee) {
+
+        for (Mot singleMot : this.motArrayList) {
+
+        }
+        return true;
+        //TODO
+    }
+
+//    public boolean ajouterMot(String unMot, int x, int y, Dir direction) {
+//        int nbCaseDispo = checkAvailableCases(x, y, direction);
+//
+//    }
+
+    public boolean checkAvailableDirectionForDefinition(int x, int y, Dir direction) {
+
+        switch (direction) {
+            case VERTICALINDIRECT, HORIZONTALDIRECT -> {
+                if (checkAvailableCases(x, y, Dir.HORIZONTALDIRECT) == 0) {
+                    return false;
+                }
+            }
+            case VERTICALDIRECT, HORIZONTALINDIRECT -> {
+                if (checkAvailableCases(x, y, Dir.VERTICALDIRECT) == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean ajouterDefinitionSimple(String definition, int x, int y) {
+        try {
+            if (isCaseVide(x, y)) {
+                Coordonnee coordonneeCase = new Coordonnee(x, y);
+                setCaseAt(new CaseDefinition(coordonneeCase, definition), coordonneeCase);
+                return true;
+            }
+            return false;
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    public boolean isCaseVide(int x, int y) {
+        return this.grilleDeCases[x][y] instanceof CaseVide;
     }
 
     public boolean ajouterMotHorizontal(String unMot, int x , int y) {
@@ -110,7 +165,7 @@ public class Grille implements I_modeleGrille {
             for (int i=0;i < unMot.length();i++) {
                 grilleDeCases[x][i+y] = new CaseLettre(new Coordonnee(x, i+y), unMot.charAt(i)) ;
             }
-            this.tableauDeMots.add(new Mot(unMot, new Coordonnee(x, y)));
+            this.motArrayList.add(new Mot(unMot, new Coordonnee(x, y)));
             return true;
         }
     }

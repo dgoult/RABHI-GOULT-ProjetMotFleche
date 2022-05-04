@@ -4,7 +4,8 @@ import enumeration.Dir;
 
 public class CaseDefinitionMultiple extends Case {
 
-    Dir direction;
+    Dir direction_1;
+    Dir direction_2;
     Coordonnee coordonneeDef;
     String definition;
 

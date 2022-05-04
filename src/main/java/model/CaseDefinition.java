@@ -11,8 +11,15 @@ public class CaseDefinition extends Case {
     String definition;
 
     public CaseDefinition() {}
-    public CaseDefinition(Coordonnee coordonneeDef) {
+    public CaseDefinition(Coordonnee coordonneeDef, String definition) {
         this.coordonneeDef = coordonneeDef;
+        this.definition = definition;
+    }
+
+    public CaseDefinition(Coordonnee coordonneeDef, String definition, Dir direction) {
+        this.coordonneeDef = coordonneeDef;
+        this.definition = definition;
+        this.direction = direction;
     }
 
 

@@ -9,16 +9,17 @@ public class Launch {
         Grille grille;
 
         grille = new Grille();
-        grille.initGrille(9, 9);
+        grille.initGrille(10, 10);
         grille.Afficher();
         grille.ajouterMotHorizontal("totem", 0,2);
         grille.Afficher();
         grille.ajouterMotVertical("obtute", 0, 0);
         grille.Afficher();
 
-        int nb = grille.checkAvailableCases(new Coordonnee(5, 5), Dir.HORIZONTALDIRECT);
+        grille.ajouterDefinitionSimple("Mot", 9, 0);
 
-        System.out.println("En 5,5 en horizontal indirect, il y a " + nb + " cases dispo");
+        grille.Afficher();
+
 
 //        GrilleGraphique grilleGraphiqueObj = new GrilleGraphique(grille, 9, 9);
 //        grilleGraphiqueObj.setVisible(true);
