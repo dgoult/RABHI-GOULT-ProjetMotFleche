@@ -2,9 +2,9 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import model.Case;
-import model.CaseVide;
-import model.Grille;
+import enumeration.Dir;
+import enumeration.EnumCase;
+import model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -92,7 +92,16 @@ public class GrilleTest {
     public void testCheckCaseAt() throws Exception {
         Grille grille = new Grille();
         grille.initGrille(5, 5);
-        // TODO
+        grille.setCaseAt(new CaseVide(), new Coordonnee(0, 0));
+        grille.setCaseAt(new CaseLettre(), new Coordonnee(0, 1));
+        grille.setCaseAt(new CaseDefinition(), new Coordonnee(0, 2));
+        grille.setCaseAt(new CaseDefinitionMultiple(), new Coordonnee(0, 3));
+
+        Assertions.assertEquals(EnumCase.CASE_VIDE, grille.checkCaseAt(0, 0));
+        Assertions.assertEquals(EnumCase.CASE_LETTRE, grille.checkCaseAt(0, 1));
+        Assertions.assertEquals(EnumCase.CASE_DEFINITION, grille.checkCaseAt(0, 2));
+        Assertions.assertEquals(EnumCase.CASE_DEFINITION_MULTIPLE, grille.checkCaseAt(0, 3));
+
     }
 
     /**
@@ -100,7 +109,14 @@ public class GrilleTest {
      */
     @Test
     public void testCheckAvailableCases() throws Exception {
-        //TODO: Test goes here...
+        Grille grille = new Grille();
+        grille.initGrille(10, 6);
+
+        Assertions.assertEquals(9, grille.checkAvailableCases(0, 0, Dir.HORIZONTALDIRECT));
+        Assertions.assertEquals(10, grille.checkAvailableCases(0, 0, Dir.HORIZONTALINDIRECT));
+        Assertions.assertEquals(5, grille.checkAvailableCases(0, 0, Dir.VERTICALDIRECT));
+        Assertions.assertEquals(6, grille.checkAvailableCases(0, 0, Dir.VERTICALINDIRECT));
+
     }
 
     /**
