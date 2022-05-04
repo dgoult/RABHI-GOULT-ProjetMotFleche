@@ -1,6 +1,7 @@
 package model;
 
 import enumeration.Dir;
+import enumeration.EnumCase;
 
 import java.util.ArrayList;
 
@@ -115,13 +116,23 @@ public class Grille implements I_modeleGrille {
     }
 
     /**
-     *
+     * Permet de placer une case aux coordonnées fournies
+     * @param uneCase
+     * @return
+     */
+    public boolean setCaseAt(Case uneCase, Coordonnee coordonnee) {
+        this.grilleDeCases[coordonnee.x][coordonnee.y] = uneCase;
+        return true;
+    }
+
+    /**
+     * renvoi la classe de la Case aux coordonnées fournies
      * @param coordonnee
      * @return returns "CaseVide", "CaseLettre", "CaseDefinition" or "CaseDefinitionMultiple" depending on the case at the coordinate
      */
-    public String checkCaseAt(Coordonnee coordonnee) {
+    public EnumCase checkCaseAt(Coordonnee coordonnee) {
         Case caseAt = this.grilleDeCases[coordonnee.x][coordonnee.y];
-        return caseAt.getClass().getSimpleName();
+        return EnumCase.getClassEnum(caseAt);
     }
 
     public int checkAvailableCases (Coordonnee coordonnee, Dir direction) {
