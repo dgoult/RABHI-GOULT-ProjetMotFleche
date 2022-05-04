@@ -2,17 +2,17 @@ package model;
 
 import enumeration.Dir;
 
+import java.util.ArrayList;
+
 public class Grille implements I_modeleGrille {
     private int hauteur;
     private int largeur;
     private Case[][] grilleDeCases;
-    private Mot[] tableauDeMots;
+    private ArrayList<Mot> tableauDeMots;
     static final int MAX_HAUTEUR = 10;
     static final int MAX_LARGEUR = 10;
 
-    public Grille() {
-
-    }
+    public Grille() {}
 
     /**
      * Permet d'initialiser la grille avec une hauteur et une largeur
@@ -46,14 +46,15 @@ public class Grille implements I_modeleGrille {
      * Affiche la grille en mode console
      */
     public void Afficher() {
-        System.out.println("012345678");
+        System.out.println("0 1 2 3 4 5 6 7 8");
         for (int h = 0; h < hauteur; h++) {
+
             for (int l = 0; l < largeur; l++) {
                 if (grilleDeCases[l][h] instanceof CaseVide) {
-                    System.out.print(".");
+                    System.out.print(". ");
                 } else if (grilleDeCases[l][h] instanceof CaseLettre) {
                     CaseLettre caseTemp = (CaseLettre) grilleDeCases[l][h];
-                    System.out.print(caseTemp.getLettre());
+                    System.out.print(caseTemp.getLettre() + " ");
                 }
             }
             System.out.println(h);
@@ -105,10 +106,10 @@ public class Grille implements I_modeleGrille {
                     }
                 }
             }
-
             for (int i=0;i < unMot.length();i++) {
                 grilleDeCases[x][i+y] = new CaseLettre(new Coordonnee(x, i+y), unMot.charAt(i)) ;
             }
+            this.tableauDeMots.add(new Mot(unMot, new Coordonnee(x, y)));
             return true;
         }
     }
@@ -144,16 +145,18 @@ public class Grille implements I_modeleGrille {
 
         if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
             // Pour les mots horizontaux
-            for (int i = checkFromCase.y; i < this.largeur; i++) {
+
+            for (int i = checkFromCase.x; i < this.hauteur; i++) {
                 if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
                     nbCaseDispo++;
                 } else {
                     break;
                 }
             }
+
         } else {
             // Pour les mots verticaux
-            for (int i = checkFromCase.x; i < this.hauteur; i++) {
+            for (int i = checkFromCase.y; i < this.largeur; i++) {
                 if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
                     nbCaseDispo++;
                 } else {
@@ -162,13 +165,7 @@ public class Grille implements I_modeleGrille {
             }
         }
 
-
-
-
-
         return nbCaseDispo;
-
-
     }
 
     public Case[][] getTableauDeCases() {
