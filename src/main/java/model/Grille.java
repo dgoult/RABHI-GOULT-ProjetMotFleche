@@ -135,45 +135,96 @@ public class Grille implements I_modeleGrille {
         return EnumCase.getClassEnum(caseAt);
     }
 
+    public EnumCase checkCaseAt(int x, int y) {
+        Case caseAt = this.grilleDeCases[x][y];
+        return EnumCase.getClassEnum(caseAt);
+    }
+
     public int checkAvailableCases (Coordonnee coordonnee, Dir direction) {
         Coordonnee checkFromCase = new Coordonnee(0,0);
         int nbCaseDispo = 0;
 
         switch (direction) {
-            case VERTICALDIRECT -> {
-                checkFromCase.y = coordonnee.y - 1;
+            case VERTICALDIRECT, HORIZONTALINDIRECT -> {
+                checkFromCase.y = coordonnee.y + 1;
                 checkFromCase.x = coordonnee.x;
             }
             case VERTICALINDIRECT, HORIZONTALDIRECT -> {
                 checkFromCase.y = coordonnee.y;
                 checkFromCase.x = coordonnee.x + 1;
             }
-            case HORIZONTALINDIRECT -> {
-                checkFromCase.y = coordonnee.y + 1;
-                checkFromCase.x = coordonnee.x;
+        }
+
+        try {
+            if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
+                // Pour les mots horizontaux
+
+                for (int i = checkFromCase.x; i < this.hauteur; i++) {
+                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
+                        nbCaseDispo++;
+                    } else {
+                        break;
+                    }
+                }
+
+            } else {
+                // Pour les mots verticaux
+                for (int i = checkFromCase.y; i < this.largeur; i++) {
+                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
+                        nbCaseDispo++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
+        }
+
+        return nbCaseDispo;
+    }
+
+    public int checkAvailableCases (int x, int y, Dir direction) {
+        Coordonnee checkFromCase = new Coordonnee(0,0);
+        int nbCaseDispo = 0;
+
+        switch (direction) {
+            case VERTICALDIRECT, HORIZONTALINDIRECT -> {
+                checkFromCase.y = y + 1;
+                checkFromCase.x = x;
+            }
+            case VERTICALINDIRECT, HORIZONTALDIRECT -> {
+                checkFromCase.y = y;
+                checkFromCase.x = x + 1;
             }
         }
 
-        if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
-            // Pour les mots horizontaux
+        try {
+            if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
+                // Pour les mots horizontaux
 
-            for (int i = checkFromCase.x; i < this.hauteur; i++) {
-                if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
-                    nbCaseDispo++;
-                } else {
-                    break;
+                for (int i = checkFromCase.x; i < this.hauteur; i++) {
+                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
+                        nbCaseDispo++;
+                    } else {
+                        break;
+                    }
+                }
+
+            } else {
+                // Pour les mots verticaux
+                for (int i = checkFromCase.y; i < this.largeur; i++) {
+                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
+                        nbCaseDispo++;
+                    } else {
+                        break;
+                    }
                 }
             }
 
-        } else {
-            // Pour les mots verticaux
-            for (int i = checkFromCase.y; i < this.largeur; i++) {
-                if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
-                    nbCaseDispo++;
-                } else {
-                    break;
-                }
-            }
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
         }
 
         return nbCaseDispo;
