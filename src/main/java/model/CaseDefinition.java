@@ -9,6 +9,7 @@ public class CaseDefinition extends Case {
     Dir direction;
     Coordonnee coordonneeDef;
     String definition;
+    Mot mot;
 
     public CaseDefinition() {}
     public CaseDefinition(Coordonnee coordonneeDef, String definition) {
@@ -20,6 +21,13 @@ public class CaseDefinition extends Case {
         this.coordonneeDef = coordonneeDef;
         this.definition = definition;
         this.direction = direction;
+    }
+
+    public CaseDefinition(Coordonnee coordonneeDef, String definition, Dir direction, Mot mot) {
+        this.coordonneeDef = coordonneeDef;
+        this.definition = definition;
+        this.direction = direction;
+        this.mot = mot;
     }
 
 

@@ -1,8 +1,10 @@
 import enumeration.Dir;
 import exception.GrilleException;
+import model.CaseDefinition;
 import model.Coordonnee;
 import model.Grille;
 import view.GrilleGraphique;
+
 
 public class Launch {
     public static void main(String args[]) {
@@ -16,7 +18,22 @@ public class Launch {
         grille.ajouterMotVertical("obtute", 0, 0);
         grille.Afficher();
 
-        grille.ajouterDefinitionSimple("Mot", 9, 0);
+
+
+
+//        grille.ajouterDefinitionSimple("Qui se lance", 9, 0, Dir.VERTICALINDIRECT);
+
+        if (grille.ajouterDefinitionSimple("Mot", 9, 0, Dir.VERTICALDIRECT)) {
+            System.out.println(grille.getTableauDeCases()[9][0].getClass());
+            System.out.println("x = " + grille.getTableauDeCases()[9][0].getCoordonnee().x +
+                    "y = " + grille.getTableauDeCases()[9][0].getCoordonnee().y);
+        }
+
+
+
+//
+//        CaseDefinition definition = (CaseDefinition) grille.getTableauDeCases()[9][0];
+//        grille.ajouterMot(definition, "Salut");
 
         grille.Afficher();
 

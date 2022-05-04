@@ -2,11 +2,11 @@ package model;
 
 public abstract class Case {
 
-     protected Coordonnee coordonneeDef;
+     protected Coordonnee coordonnee;
 
      public Case() {}
      public Coordonnee getCoordonnee() {
-          return this.coordonneeDef;
+          return this.coordonnee;
      }
 
      /**
@@ -15,6 +15,6 @@ public abstract class Case {
       * @param y
       */
      public void setCoordonnee(int x, int y) {
-          this.coordonneeDef = new Coordonnee(x, y);
+          this.coordonnee = new Coordonnee(x, y);
      }
 }

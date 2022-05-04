@@ -9,6 +9,13 @@ public class Mot {
     private Dir directionMot;
     private Coordonnee coordonneeDepartMot;
 
+
+
+    /**
+     *
+     * @param mot
+     * @param coordonneeDepartMot
+     */
     public Mot(String mot, Coordonnee coordonneeDepartMot) {
         this.mot = mot;
         this.coordonneeDepartMot = coordonneeDepartMot;

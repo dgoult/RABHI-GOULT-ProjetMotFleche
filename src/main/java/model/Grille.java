@@ -78,10 +78,47 @@ public class Grille implements I_modeleGrille {
         //TODO
     }
 
-//    public boolean ajouterMot(String unMot, int x, int y, Dir direction) {
-//        int nbCaseDispo = checkAvailableCases(x, y, direction);
-//
-//    }
+    public boolean ajouterMot(Case caseDefinition, String mot) {
+
+        if (caseDefinition instanceof CaseDefinition uneCase) {
+
+            int nbCaseDispo = checkAvailableCases(uneCase.getCoordonnee().x, uneCase.getCoordonnee().y, uneCase.direction);
+
+            // Si le mot est trop long
+            if (mot.length() > nbCaseDispo) {
+                System.out.printf("Le mot \"" + mot + "\" est trop long");
+                return false;
+            }
+
+            Mot unMot = new Mot(mot, getCoordonneeByDirection(uneCase.direction ,uneCase.getCoordonnee().x, uneCase.getCoordonnee().y));
+
+            this.motArrayList.add(unMot);
+            uneCase.mot = unMot;
+
+            return true;
+
+        }
+        return false;
+    }
+
+    public Coordonnee getCoordonneeByDirection(Dir direction, int x, int y) {
+
+        Coordonnee coordonnee = new Coordonnee();
+
+        switch (direction) {
+            case VERTICALDIRECT, HORIZONTALINDIRECT -> {
+                coordonnee.y = y + 1;
+                coordonnee.x = x;
+            }
+            case VERTICALINDIRECT, HORIZONTALDIRECT -> {
+                coordonnee.y = y;
+                coordonnee.x = x + 1;
+            }
+        }
+
+        return coordonnee;
+
+    }
 
     public boolean checkAvailableDirectionForDefinition(int x, int y, Dir direction) {
 
@@ -100,12 +137,18 @@ public class Grille implements I_modeleGrille {
         return true;
     }
 
-    public boolean ajouterDefinitionSimple(String definition, int x, int y) {
+    public boolean ajouterDefinitionSimple(String definition, int x, int y, Dir direction) {
         try {
             if (isCaseVide(x, y)) {
-                Coordonnee coordonneeCase = new Coordonnee(x, y);
-                setCaseAt(new CaseDefinition(coordonneeCase, definition), coordonneeCase);
-                return true;
+                if (checkAvailableDirectionForDefinition(x, y, direction)) {
+                    Coordonnee coordonneeCase = new Coordonnee(x, y);
+                    setCaseAt(new CaseDefinition(coordonneeCase, definition), coordonneeCase);
+                    return true;
+                } else {
+                    System.out.println("La définition \"" + definition + "\" en " + x + ":" + y + " dans la direction " + direction.toString() + " n'est pas possible");
+                    return false;
+                }
+
             }
             return false;
         } catch (IndexOutOfBoundsException e) {
