@@ -7,10 +7,14 @@ public class CaseLettre extends Case {
     String definition;
     char lettre;
 
+    public CaseLettre() {}
+    public CaseLettre(char lettre) {}
     public CaseLettre(Coordonnee coordonneeLettre, char lettre) {
         this.coordonneeLettre = coordonneeLettre;
         this.lettre = lettre;
     }
+
+
 
     public void setLettre(char lettre) {
         this.lettre = lettre;

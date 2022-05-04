@@ -8,6 +8,7 @@ public class CaseDefinitionMultiple extends Case {
     Coordonnee coordonneeDef;
     String definition;
 
+    public CaseDefinitionMultiple() {}
     public CaseDefinitionMultiple(Coordonnee coordonneeDef) {
         this.coordonneeDef = coordonneeDef;
     }

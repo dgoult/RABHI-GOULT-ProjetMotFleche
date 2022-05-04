@@ -4,6 +4,7 @@ public abstract class Case {
 
      protected Coordonnee coordonneeDef;
 
+     public Case() {}
      public Coordonnee getCoordonnee() {
           return this.coordonneeDef;
      }

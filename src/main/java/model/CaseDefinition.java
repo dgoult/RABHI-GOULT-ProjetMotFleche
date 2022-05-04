@@ -10,6 +10,7 @@ public class CaseDefinition extends Case {
     Coordonnee coordonneeDef;
     String definition;
 
+    public CaseDefinition() {}
     public CaseDefinition(Coordonnee coordonneeDef) {
         this.coordonneeDef = coordonneeDef;
     }
