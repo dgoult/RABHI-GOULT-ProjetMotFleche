@@ -13,21 +13,13 @@ public class Launch {
         grille = new Grille();
         grille.initGrille(10, 10);
         grille.Afficher();
-        grille.ajouterMotHorizontal("totem", 0,2);
-        grille.Afficher();
-        grille.ajouterMotVertical("obtute", 0, 0);
-        grille.Afficher();
+        grille.ajouterMot(grille.ajouterDefinitionSimple("truc", 0, 2, Dir.HORIZONTALDIRECT), "totem", 0, 2, false);
 
 
 
 
 //        grille.ajouterDefinitionSimple("Qui se lance", 9, 0, Dir.VERTICALINDIRECT);
 
-        if (grille.ajouterDefinitionSimple("Mot", 9, 0, Dir.VERTICALDIRECT)) {
-            System.out.println(grille.getTableauDeCases()[9][0].getClass());
-            System.out.println("x = " + grille.getTableauDeCases()[9][0].getCoordonnee().x +
-                    "y = " + grille.getTableauDeCases()[9][0].getCoordonnee().y);
-        }
 
 
 

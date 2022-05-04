@@ -17,4 +17,13 @@ public abstract class Case {
      public void setCoordonnee(int x, int y) {
           this.coordonnee = new Coordonnee(x, y);
      }
+
+     public int getx() {
+          return this.coordonnee.x;
+     }
+
+     public int gety() {
+          return this.coordonnee.y;
+     }
+
 }

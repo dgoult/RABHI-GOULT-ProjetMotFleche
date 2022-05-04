@@ -57,7 +57,7 @@ public class Grille implements I_modeleGrille {
                 if (grilleDeCases[l][h] instanceof CaseVide) {
                     System.out.print(". ");
                 } else if (grilleDeCases[l][h] instanceof CaseLettre caseTemp) {
-                    System.out.print(caseTemp.getLettre() + " ");
+                    System.out.print(Character.toUpperCase(caseTemp.getLettre()) + " ");
                 } else if (grilleDeCases[l][h] instanceof CaseDefinition caseTemp) {
                     System.out.print("1 ");
                 }  else if (grilleDeCases[l][h] instanceof CaseDefinitionMultiple caseTemp) {
@@ -78,24 +78,43 @@ public class Grille implements I_modeleGrille {
         //TODO
     }
 
-    public boolean ajouterMot(Case caseDefinition, String mot) {
+    public boolean ajouterMot(Case caseDefinition, String mot, int x, int y, boolean isVertical) {
 
         if (caseDefinition instanceof CaseDefinition uneCase) {
 
-            int nbCaseDispo = checkAvailableCases(uneCase.getCoordonnee().x, uneCase.getCoordonnee().y, uneCase.direction);
+            Coordonnee coordonneeMot = getCoordonneeByDirection(uneCase.direction ,uneCase.getCoordonnee().x, uneCase.getCoordonnee().y);
 
-            // Si le mot est trop long
-            if (mot.length() > nbCaseDispo) {
-                System.out.printf("Le mot \"" + mot + "\" est trop long");
+            if (coordonneeMot.x >= largeur || coordonneeMot.x <= 0 || coordonneeMot.y >= hauteur || coordonneeMot.y <= 0) {
+                System.out.println("Le mot dépasse");
                 return false;
             }
 
-            Mot unMot = new Mot(mot, getCoordonneeByDirection(uneCase.direction ,uneCase.getCoordonnee().x, uneCase.getCoordonnee().y));
+            if (canWordBePlaced(mot, coordonneeMot.x, coordonneeMot.y, isVertical)) {
 
-            this.motArrayList.add(unMot);
-            uneCase.mot = unMot;
 
-            return true;
+                Mot unMot = new Mot(mot, coordonneeMot, isVertical);
+
+                System.out.println(unMot.getCoordonneeDepartMot().x + ":" + unMot.getCoordonneeDepartMot().y);
+
+                this.motArrayList.add(unMot);
+                uneCase.mot = unMot;
+
+                if (isVertical) {
+                    if (this.ajouterMotVertical(mot, coordonneeMot.x, coordonneeMot.y)) {
+                        System.out.println("Le mot a été ajouté en vertical");
+                    } else {
+                        System.out.println("Le mot n'a pas été ajouté en vertical");
+                    }
+                } else {
+                    if (this.ajouterMotHorizontal(mot, coordonneeMot.x, coordonneeMot.y)) {
+                        System.out.println("Le mot a été ajouté en horizontal");
+                    }else {
+                        System.out.println("Le mot n'a pas été ajouté en horizontal");
+                    }
+                }
+                return true;
+            }
+            System.out.println("Le mot ne peut être placé");
 
         }
         return false;
@@ -124,12 +143,22 @@ public class Grille implements I_modeleGrille {
 
         switch (direction) {
             case VERTICALINDIRECT, HORIZONTALDIRECT -> {
-                if (checkAvailableCases(x, y, Dir.HORIZONTALDIRECT) == 0) {
+                // On vérifie que le mot de cette définition ne dépassera pas la grille
+                if (y + 1 >= this.hauteur) {
+                    return false;
+                }
+                // On vérifie que la case où le mot commencera n'est pas une définition simple ou double
+                if (grilleDeCases[x][y+1] instanceof CaseDefinition || grilleDeCases[x+1][y] instanceof CaseDefinitionMultiple) {
                     return false;
                 }
             }
             case VERTICALDIRECT, HORIZONTALINDIRECT -> {
-                if (checkAvailableCases(x, y, Dir.VERTICALDIRECT) == 0) {
+                // On vérifie que le mot de cette définition ne dépassera pas la grille
+                if (x + 1 >= this.largeur) {
+                    return false;
+                }
+                // On vérifie que la case où le mot commencera n'est pas une définition simple ou double
+                if (grilleDeCases[x+1][y] instanceof CaseDefinition || grilleDeCases[x+1][y] instanceof CaseDefinitionMultiple) {
                     return false;
                 }
             }
@@ -137,22 +166,28 @@ public class Grille implements I_modeleGrille {
         return true;
     }
 
-    public boolean ajouterDefinitionSimple(String definition, int x, int y, Dir direction) {
+    public Case ajouterDefinitionSimple(String definition, int x, int y, Dir direction) {
         try {
             if (isCaseVide(x, y)) {
                 if (checkAvailableDirectionForDefinition(x, y, direction)) {
                     Coordonnee coordonneeCase = new Coordonnee(x, y);
-                    setCaseAt(new CaseDefinition(coordonneeCase, definition), coordonneeCase);
-                    return true;
+
+                    CaseDefinition caseDefTemp = new CaseDefinition(coordonneeCase, definition);
+                    caseDefTemp.setCoordonnee(x, y);
+                    caseDefTemp.direction = direction;
+
+                    setCaseAt(caseDefTemp, coordonneeCase);
+                    System.out.println("La définition \"" + definition + "\" aux coordonnées " + x + ":" + y + " en direction " + direction.toString());
+                    return caseDefTemp;
                 } else {
                     System.out.println("La définition \"" + definition + "\" en " + x + ":" + y + " dans la direction " + direction.toString() + " n'est pas possible");
-                    return false;
+                    return null;
                 }
 
             }
-            return false;
+            return null;
         } catch (IndexOutOfBoundsException e) {
-            return false;
+            return null;
         }
     }
 
@@ -160,57 +195,85 @@ public class Grille implements I_modeleGrille {
         return this.grilleDeCases[x][y] instanceof CaseVide;
     }
 
-    public boolean ajouterMotHorizontal(String unMot, int x , int y) {
+    public boolean canWordBePlaced(String unMot, int x , int y, boolean isVertical) {
+
+        unMot = unMot.toLowerCase();
+
+
         if (unMot.length()+x>largeur) {
             System.out.println("le mot : "+unMot+" est trop long");
-            return false;
         } else {
-
-            // On check si toutes les cases sont bien vide
-            for (int i=0;i < unMot.length();i++) {
-                if (!(grilleDeCases[i+x][y] instanceof CaseVide)) {
-                    if (grilleDeCases[i+x][y] instanceof CaseLettre) {
-                        if (((CaseLettre) grilleDeCases[i + x][y]).getLettre() != unMot.charAt(i)) {
+            if (isVertical) {
+                for (int i=0;i < unMot.length();i++) {
+                    if (!(grilleDeCases[x][i+y] instanceof CaseVide)) {
+                        if (grilleDeCases[x][i+y] instanceof CaseLettre) {
+                            if (((CaseLettre) grilleDeCases[x][i+y]).getLettre() != unMot.charAt(i)) {
+                                System.out.println("Le mot rencontre un autre mot, et n'a pas de lettre en commun là où ils ce croisent");
+                                return false;
+                            }
+                        } else {
+                            System.out.println("Il y a une case de type " + grilleDeCases[x][i+y].getClass().toString() + " ici");
                             return false;
                         }
-                    } else {
-                        return false;
                     }
+                }
 
+            } else {
+                for (int i=0;i < unMot.length();i++) {
+                    if (!(grilleDeCases[i+x][y] instanceof CaseVide)) {
+                        if (grilleDeCases[i+x][y] instanceof CaseLettre) {
+                            if (((CaseLettre) grilleDeCases[i + x][y]).getLettre() != unMot.charAt(i)) {
+                                System.out.println("Le mot rencontre un autre mot, et n'a pas de lettre en commun là où ils ce croisent");
+                                return false;
+                            }
+                        } else {
+                            System.out.println("Il y a une case de type " + grilleDeCases[x][i+y].getClass().toString() + " ici");
+                            return false;
+                        }
+
+                    }
                 }
             }
-
-            for (int i=0;i < unMot.length();i++) {
-                grilleDeCases[i+x][y] = new CaseLettre(new Coordonnee(i+x, y), unMot.charAt(i)) ;
-            }
-            return true;
         }
+
+        System.out.println("Le mot peut être placé");
+        return true;
+
+    }
+
+    public boolean ajouterMotHorizontal(String unMot, int x , int y) {
+
+        unMot = unMot.toLowerCase();
+
+        if (unMot.length()+x>largeur) {
+            System.out.println("le mot : "+unMot+" est trop long");
+        } else {
+            if(canWordBePlaced(unMot, x, y, false)) {
+
+                for (int i=0;i < unMot.length();i++) {
+                    grilleDeCases[i+x][y] = new CaseLettre(new Coordonnee(i+x, y), unMot.charAt(i)) ;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean ajouterMotVertical(String unMot, int x , int y) {
+
+        unMot = unMot.toLowerCase();
+
         if (unMot.length()+y>hauteur) {
             System.out.println("le mot : "+unMot+" est trop long");
-            return false;
         } else {
-
-            // On check si toutes les cases sont bien vide
-            for (int i=0;i < unMot.length();i++) {
-                if (!(grilleDeCases[x][i+y] instanceof CaseVide)) {
-                    if (grilleDeCases[x][i+y] instanceof CaseLettre) {
-                        if (((CaseLettre) grilleDeCases[x][i+y]).getLettre() != unMot.charAt(i)) {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
+            if(canWordBePlaced(unMot, x, y, true)) {
+                for (int i = 0; i < unMot.length(); i++) {
+                    grilleDeCases[x][i + y] = new CaseLettre(new Coordonnee(x, i + y), unMot.charAt(i));
                 }
+                return true;
             }
-            for (int i=0;i < unMot.length();i++) {
-                grilleDeCases[x][i+y] = new CaseLettre(new Coordonnee(x, i+y), unMot.charAt(i)) ;
-            }
-            this.motArrayList.add(new Mot(unMot, new Coordonnee(x, y)));
-            return true;
         }
+        return false;
     }
 
     /**
@@ -238,51 +301,13 @@ public class Grille implements I_modeleGrille {
         return EnumCase.getClassEnum(caseAt);
     }
 
-    public int checkAvailableCases (Coordonnee coordonnee, Dir direction) {
-        Coordonnee checkFromCase = new Coordonnee(0,0);
-        int nbCaseDispo = 0;
-
-        switch (direction) {
-            case VERTICALDIRECT, HORIZONTALINDIRECT -> {
-                checkFromCase.y = coordonnee.y + 1;
-                checkFromCase.x = coordonnee.x;
-            }
-            case VERTICALINDIRECT, HORIZONTALDIRECT -> {
-                checkFromCase.y = coordonnee.y;
-                checkFromCase.x = coordonnee.x + 1;
-            }
-        }
-
-        try {
-            if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
-                // Pour les mots horizontaux
-
-                for (int i = checkFromCase.x; i < this.hauteur; i++) {
-                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
-                        nbCaseDispo++;
-                    } else {
-                        break;
-                    }
-                }
-
-            } else {
-                // Pour les mots verticaux
-                for (int i = checkFromCase.y; i < this.largeur; i++) {
-                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
-                        nbCaseDispo++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-        } catch (IndexOutOfBoundsException e) {
-            return 0;
-        }
-
-        return nbCaseDispo;
-    }
-
+    /**
+     * Permet de vérifier le nombre de cases dispo, pour l'auto complétion
+     * @param x
+     * @param y
+     * @param direction
+     * @return
+     */
     public int checkAvailableCases (int x, int y, Dir direction) {
         Coordonnee checkFromCase = new Coordonnee(0,0);
         int nbCaseDispo = 0;

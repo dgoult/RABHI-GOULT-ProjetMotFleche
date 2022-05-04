@@ -7,24 +7,27 @@ import java.awt.*;
 public class CaseDefinition extends Case {
 
     Dir direction;
-    Coordonnee coordonneeDef;
+    Coordonnee coordonnee;
     String definition;
     Mot mot;
 
     public CaseDefinition() {}
-    public CaseDefinition(Coordonnee coordonneeDef, String definition) {
-        this.coordonneeDef = coordonneeDef;
+    public CaseDefinition(String definition) {
+        this.definition = definition;
+    }
+    public CaseDefinition(Coordonnee coordonnee, String definition) {
+        this.coordonnee = coordonnee;
         this.definition = definition;
     }
 
-    public CaseDefinition(Coordonnee coordonneeDef, String definition, Dir direction) {
-        this.coordonneeDef = coordonneeDef;
+    public CaseDefinition(Coordonnee coordonnee, String definition, Dir direction) {
+        this.coordonnee = coordonnee;
         this.definition = definition;
         this.direction = direction;
     }
 
-    public CaseDefinition(Coordonnee coordonneeDef, String definition, Dir direction, Mot mot) {
-        this.coordonneeDef = coordonneeDef;
+    public CaseDefinition(Coordonnee coordonnee, String definition, Dir direction, Mot mot) {
+        this.coordonnee = coordonnee;
         this.definition = definition;
         this.direction = direction;
         this.mot = mot;

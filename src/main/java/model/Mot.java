@@ -5,8 +5,7 @@ import enumeration.Dir;
 public class Mot {
 
     private String mot;
-    private int longueurMot;
-    private Dir directionMot;
+    private boolean isVertical;
     private Coordonnee coordonneeDepartMot;
 
 
@@ -16,9 +15,12 @@ public class Mot {
      * @param mot
      * @param coordonneeDepartMot
      */
-    public Mot(String mot, Coordonnee coordonneeDepartMot) {
+    public Mot(String mot, Coordonnee coordonneeDepartMot, boolean isVertical) {
         this.mot = mot;
         this.coordonneeDepartMot = coordonneeDepartMot;
+        this.isVertical = isVertical;
     }
+
+    public Coordonnee getCoordonneeDepartMot() { return this.coordonneeDepartMot; }
 
 }
