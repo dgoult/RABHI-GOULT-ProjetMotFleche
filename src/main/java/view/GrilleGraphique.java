@@ -1,9 +1,6 @@
 package view;
 
-import model.CaseDefinition;
-import model.CaseLettre;
-import model.CaseVide;
-import model.Grille;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -15,6 +12,8 @@ public class GrilleGraphique extends JFrame {
     private Grille grille;
 
     public GrilleGraphique(Grille grille, int hauteur, int largeur) {
+
+        super("Mot fléché");
 
         this.grille = grille;
         this.grilleDeLabel = new JLabel[hauteur][largeur];
@@ -32,6 +31,9 @@ public class GrilleGraphique extends JFrame {
                 }
                 else if (this.grille.getTableauDeCases()[i][j] instanceof CaseDefinition) {
                     sLabel = "Definition";
+                }
+                else if (this.grille.getTableauDeCases()[i][j] instanceof CaseDefinitionMultiple) {
+                    sLabel = "Definition Multiple";
                 }
                 else if (this.grille.getTableauDeCases()[i][j] instanceof CaseVide) {
                     sLabel = "";
