@@ -3,7 +3,9 @@ package model;
 import enumeration.Dir;
 import enumeration.EnumCase;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Grille implements I_modeleGrille {
     private int hauteur;
@@ -84,7 +86,7 @@ public class Grille implements I_modeleGrille {
 
             Coordonnee coordonneeMot = getCoordonneeByDirection(uneCase.direction ,uneCase.getCoordonnee().x, uneCase.getCoordonnee().y);
 
-            if (coordonneeMot.x >= largeur || coordonneeMot.x <= 0 || coordonneeMot.y >= hauteur || coordonneeMot.y <= 0) {
+            if (coordonneeMot.x >= largeur || coordonneeMot.x < 0 || coordonneeMot.y >= hauteur || coordonneeMot.y < 0) {
                 System.out.println("Le mot dépasse");
                 return false;
             }
@@ -124,16 +126,7 @@ public class Grille implements I_modeleGrille {
 
         Coordonnee coordonnee = new Coordonnee();
 
-        switch (direction) {
-            case VERTICALDIRECT, HORIZONTALINDIRECT -> {
-                coordonnee.y = y + 1;
-                coordonnee.x = x;
-            }
-            case VERTICALINDIRECT, HORIZONTALDIRECT -> {
-                coordonnee.y = y;
-                coordonnee.x = x + 1;
-            }
-        }
+        GetWordCoordonneeFromDir(x, y, direction, coordonnee);
 
         return coordonnee;
 
@@ -198,7 +191,6 @@ public class Grille implements I_modeleGrille {
     public boolean canWordBePlaced(String unMot, int x , int y, boolean isVertical) {
 
         unMot = unMot.toLowerCase();
-
 
         if (unMot.length()+x>largeur) {
             System.out.println("le mot : "+unMot+" est trop long");
@@ -301,17 +293,90 @@ public class Grille implements I_modeleGrille {
         return EnumCase.getClassEnum(caseAt);
     }
 
+    public ArrayList<String> findWord(int x, int y, Dir direction) {
+
+        String availableCasesString = checkAvailableCases(x, y, direction);
+        int emptyCases = 0;
+        StringBuilder regexTemp = new StringBuilder();
+
+        for (char c : availableCasesString.toCharArray()) {
+            if (c == '.') {
+                emptyCases++;
+            }
+            else {
+                regexTemp.append("[a-zA-Zéèçàù]{").append(emptyCases).append("}").append(c);
+                emptyCases = 0;
+            }
+        }
+        regexTemp.append("[a-zA-Zéèçàù]{0,").append(emptyCases).append("}");
+
+        try {
+            return AutoCompletion.findWordWithRegex(regexTemp.toString());
+        } catch (IOException e) {
+            System.out.println(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+            return new ArrayList<>();
+        }
+
+
+    }
+
     /**
      * Permet de vérifier le nombre de cases dispo, pour l'auto complétion
      * @param x
      * @param y
-     * @param direction
-     * @return
+     * @param direction de la définition associé
+     * @return either the ArrayList<String[]> or null if the word is too long
      */
-    public int checkAvailableCases (int x, int y, Dir direction) {
+    public String checkAvailableCases (int x, int y, Dir direction) {
+
         Coordonnee checkFromCase = new Coordonnee(0,0);
+
         int nbCaseDispo = 0;
 
+        StringBuilder stringTemp = new StringBuilder();
+
+        GetWordCoordonneeFromDir(x, y, direction, checkFromCase);
+
+        try {
+            if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
+                // Pour les mots horizontaux
+
+                for (int i = checkFromCase.x; i < this.largeur; i++) {
+                    if (this.grilleDeCases[i][checkFromCase.y] instanceof CaseVide) {
+                        nbCaseDispo++;
+                        stringTemp.append(".");
+                    }
+                    else if (this.grilleDeCases[i][checkFromCase.y] instanceof CaseLettre caseLettre) {
+                        stringTemp.append(caseLettre.getLettreString());
+                    } else {
+                        break;
+                    }
+                }
+
+            } else {
+                // Pour les mots verticaux
+                for (int i = checkFromCase.y; i < this.hauteur; i++) {
+                    if (this.grilleDeCases[checkFromCase.x][i] instanceof CaseVide) {
+                        nbCaseDispo++;
+                        stringTemp.append(".");
+                    }
+                    else if (this.grilleDeCases[checkFromCase.x][i] instanceof CaseLettre caseLettre) {
+                        stringTemp.append(caseLettre.getLettreString());
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+
+        } catch (IndexOutOfBoundsException ignored) {
+
+        }
+        System.out.println("Fonction check available cases, resultat = " + stringTemp.toString() + "\n");
+        return stringTemp.toString();
+    }
+
+    private void GetWordCoordonneeFromDir(int x, int y, Dir direction, Coordonnee checkFromCase) {
         switch (direction) {
             case VERTICALDIRECT, HORIZONTALINDIRECT -> {
                 checkFromCase.y = y + 1;
@@ -322,35 +387,6 @@ public class Grille implements I_modeleGrille {
                 checkFromCase.x = x + 1;
             }
         }
-
-        try {
-            if (direction == Dir.HORIZONTALDIRECT || direction == Dir.HORIZONTALINDIRECT) {
-                // Pour les mots horizontaux
-
-                for (int i = checkFromCase.x; i < this.hauteur; i++) {
-                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
-                        nbCaseDispo++;
-                    } else {
-                        break;
-                    }
-                }
-
-            } else {
-                // Pour les mots verticaux
-                for (int i = checkFromCase.y; i < this.largeur; i++) {
-                    if (this.grilleDeCases[checkFromCase.x][checkFromCase.y] instanceof CaseVide) {
-                        nbCaseDispo++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-        } catch (IndexOutOfBoundsException e) {
-            return 0;
-        }
-
-        return nbCaseDispo;
     }
 
     public Case[][] getTableauDeCases() {
