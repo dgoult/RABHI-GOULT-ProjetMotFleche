@@ -1,6 +1,4 @@
-package model;
-
-import enumeration.Dir;
+package objects;
 
 public class Mot {
 

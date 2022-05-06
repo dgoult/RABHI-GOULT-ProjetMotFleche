@@ -2,6 +2,7 @@ package model;
 
 import enumeration.Dir;
 import enumeration.EnumCase;
+import objects.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

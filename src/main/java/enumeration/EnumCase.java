@@ -1,6 +1,9 @@
 package enumeration;
 
-import model.*;
+import objects.Case;
+import objects.CaseDefinition;
+import objects.CaseDefinitionMultiple;
+import objects.CaseLettre;
 
 public enum EnumCase {
     CASE_VIDE,
