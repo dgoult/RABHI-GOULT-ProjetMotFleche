@@ -28,6 +28,7 @@ public class AutoCompletion {
         ArrayList<String> mots = new ArrayList<String>();
 
         try (BufferedReader br = new BufferedReader(new FileReader("liste_francais.txt"))) {
+
             StringBuilder sb = new StringBuilder();
             String line;
 
