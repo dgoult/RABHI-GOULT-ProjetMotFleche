@@ -1,5 +1,7 @@
 package model;
 
+import objects.Case;
+
 public interface I_modeleGrille {
     public boolean ajouterMotHorizontal(String string, int x, int y);
     public boolean ajouterMotVertical(String string, int x, int y);

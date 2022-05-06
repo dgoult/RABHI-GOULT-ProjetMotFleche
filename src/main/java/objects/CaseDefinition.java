@@ -1,15 +1,13 @@
-package model;
+package objects;
 
 import enumeration.Dir;
 
-import java.awt.*;
-
 public class CaseDefinition extends Case {
 
-    Dir direction;
+    public Dir direction;
     Coordonnee coordonnee;
     String definition;
-    Mot mot;
+    public Mot mot;
 
     public CaseDefinition() {}
     public CaseDefinition(String definition) {
