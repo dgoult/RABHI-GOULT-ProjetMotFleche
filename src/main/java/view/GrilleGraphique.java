@@ -36,6 +36,7 @@ public class GrilleGraphique{
         // Définition de la Frame
         frame = new JFrame("Hello World");
         JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(grille.getHauteur(), grille.getLargeur()));
 
         // Définir le menu principal
         JMenuBar menu = new JMenuBar();
@@ -58,9 +59,10 @@ public class GrilleGraphique{
 
 
         frame.add(menu);
-        frame.add(panel);
 
-        frame.setSize(300, 400);
+
+
+        frame.setSize(600, 500);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
@@ -86,10 +88,13 @@ public class GrilleGraphique{
                     sLabel = "XX";
                 }
 
-                JButton btn = GrilleGraphique.buttonFactory(sLabel, i * 40, j * 40);
-                frame.add(btn);
+                JButton btn = GrilleGraphique.buttonFactory(sLabel, i * 40, j * 40, i, j);
+                panel.add(btn);
             }
         }
+
+
+        frame.add(panel);
 
         frame.setVisible(true);
 
@@ -112,16 +117,26 @@ public class GrilleGraphique{
         return label;
     }
 
-    private static JButton buttonFactory(String text, int x, int y) {
+    private static JButton buttonFactory(String text, int sizeX, int sizeY, int caseX, int caseY) {
 
         JButton btn = new JButton(text);
         btn.setAlignmentX(SwingConstants.CENTER);
         btn.setAlignmentY(SwingConstants.CENTER);
-        btn.setBounds(x, y, 35, 35);
+        btn.setSize(sizeX, sizeY);
+        btn.setBounds(sizeX, sizeY, 35, 35);
         btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         btn.setFocusable(true);
-        btn.setText(x + ":" + y);
-        btn.addActionListener(new JButtonListener(x, y));
+        btn.setText(sizeX + ":" + sizeY);
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int x = caseX;
+                int y = caseY;
+                System.out.printf("Je suis en " + x + ":" + y);
+
+                
+            }
+        });
 
 
         return btn;
