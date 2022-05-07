@@ -280,6 +280,17 @@ public class Grille implements I_modeleGrille {
     }
 
     /**
+     * Permet de mettre une case à vide aux coordonnées fournies
+     * @param uneCase
+     * @return
+     */
+    public boolean deleteCaseAt(Case uneCase, Coordonnee coordonnee) {
+        CaseVide caseVide = new CaseVide();
+        setCaseAt(caseVide, coordonnee);
+        return true;
+    }
+
+    /**
      * renvoi la classe de la Case aux coordonnées fournies
      * @param coordonnee
      * @return returns "CaseVide", "CaseLettre", "CaseDefinition" or "CaseDefinitionMultiple" depending on the case at the coordinate
