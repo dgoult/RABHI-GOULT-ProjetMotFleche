@@ -1,7 +1,6 @@
 package view;
 
 import enumeration.EnumCase;
-import listener.JButtonListener;
 import model.*;
 import objects.*;
 import org.jetbrains.annotations.NotNull;
@@ -125,17 +124,17 @@ public class GrilleGraphique{
                 int y = caseY;
                 JPopupMenu varJPopupMenu;
                 System.out.printf("Je suis en " + x + ":" + y);
-                Case laCase = grilleTemp[x][y];
+                Case laCase = grilleTemp[y][x];
 
 
                 if (laCase instanceof CaseVide) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_VIDE, laCase);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_VIDE);
                 } else if (laCase instanceof CaseLettre) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_LETTRE, laCase);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_LETTRE);
                 } else if (laCase instanceof CaseDefinition) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION, laCase);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION);
                 } else {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION_MULTIPLE, laCase);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION_MULTIPLE);
                 }
 
                 menuContextuel = varJPopupMenu;
@@ -149,7 +148,7 @@ public class GrilleGraphique{
         return btn;
     }
 
-    private JPopupMenu createContextualMenu(EnumCase enumCase, Case uneCase) {
+    private JPopupMenu createContextualMenu(EnumCase enumCase) {
         JPopupMenu jPopupMenu = new JPopupMenu();
 
         // Action "Ajouter une définition"
