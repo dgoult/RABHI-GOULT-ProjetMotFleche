@@ -11,6 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.EventListener;
 
 public class GrilleGraphique{
 
@@ -22,6 +25,7 @@ public class GrilleGraphique{
     private static boolean start = true;
     private static double result = 0;
     private static String lastCommand = "=";
+    private final JPopupMenu menuContextuel;
 
 
     protected JLabel[][] grilleDeLabel;
@@ -38,31 +42,24 @@ public class GrilleGraphique{
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(grille.getHauteur(), grille.getLargeur()));
 
-        // Définir le menu principal
-        JMenuBar menu = new JMenuBar();
-        JMenu file = new JMenu("Fichier");
-        JMenu edit = new JMenu("Edition");
-        JMenu help = new JMenu("Aide");
 
-        // Définir le sous-menu pour Fichier
-        JMenuItem newf = new JMenuItem("Nouveau");
-        JMenuItem quit = new JMenuItem("Ouvrir");
-        JMenuItem save = new JMenuItem("Enregistrer");
+        this.menuContextuel = new JPopupMenu("Menu");
+        JMenuItem ajouterDef = new JMenuItem("Ajouter une definition");
+        ajouterDef.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("yoo");
+            }
+        });
 
-        file.add(newf);
-        file.add(save);
-        file.add(quit);
-
-        menu.add(file);
-        menu.add(edit);
-        menu.add(help);
-
-
-        frame.add(menu);
+        this.menuContextuel.add(ajouterDef);
 
 
 
-        frame.setSize(600, 500);
+
+
+
+        frame.setSize(grille.getLargeur() * 120, grille.getHauteur() * 120);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
@@ -88,7 +85,7 @@ public class GrilleGraphique{
                     sLabel = "XX";
                 }
 
-                JButton btn = GrilleGraphique.buttonFactory(sLabel, i * 40, j * 40, i, j);
+                JButton btn = this.buttonFactory(this, sLabel, i * 40, j * 40, i, j);
                 panel.add(btn);
             }
         }
@@ -117,7 +114,7 @@ public class GrilleGraphique{
         return label;
     }
 
-    private static JButton buttonFactory(String text, int sizeX, int sizeY, int caseX, int caseY) {
+    private JButton buttonFactory(GrilleGraphique grille, String text, int sizeX, int sizeY, int caseX, int caseY) {
 
         JButton btn = new JButton(text);
         btn.setAlignmentX(SwingConstants.CENTER);
@@ -127,20 +124,19 @@ public class GrilleGraphique{
         btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         btn.setFocusable(true);
         btn.setText(sizeX + ":" + sizeY);
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
                 int x = caseX;
                 int y = caseY;
                 System.out.printf("Je suis en " + x + ":" + y);
+                grille.menuContextuel.show(e.getComponent(), e.getX(), e.getY());
 
-                
             }
         });
 
-
         return btn;
     }
+
 
 
 

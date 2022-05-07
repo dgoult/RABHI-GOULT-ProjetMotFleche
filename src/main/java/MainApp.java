@@ -23,6 +23,9 @@ public class MainApp {
 
     public static void main(String args[]) throws IOException {
 
+
+
+
         /**
          * Le model
          */
@@ -44,9 +47,6 @@ public class MainApp {
 
         grilleGraphique = new GrilleGraphique(grille);
         grilleController = new GrilleController(grille, grilleGraphique);
-
-
-
 
         grille.Afficher();
         grille.ajouterMot(grille.ajouterDefinitionSimple("truc", 1, 0, Dir.VERTICALDIRECT), "totem", 1, 0, true);
