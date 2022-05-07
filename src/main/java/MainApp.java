@@ -59,6 +59,7 @@ public class MainApp {
             System.out.println(unMot);
         }
 
+        grilleGraphique.displayGrille();
 
 //        GrilleGraphique grilleGraphiqueObj = new GrilleGraphique(grille, 6, 6);
 //        grilleGraphiqueObj.setVisible(true);
