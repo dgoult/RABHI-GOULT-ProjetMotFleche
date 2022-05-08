@@ -304,6 +304,32 @@ public class GrilleGraphique{
         JPopupMenu jPopupMenu = new JPopupMenu();
         Coordonnee coordonneeCase = new Coordonnee(y, x);
 
+        // Action "Ajouter un mot verticale"
+        JMenuItem ajouterMotVertical = new JMenuItem("Ajouter un mot verticale");
+        ajouterMotVertical.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String mot = JOptionPane.showInputDialog(frame, "Saisissez votre mot");
+                grille.ajouterMotVertical(mot, coordonneeCase.x, coordonneeCase.y);
+                System.out.println("ajouter mot Vertical");
+                displayGrille();
+            }
+        });
+
+        // Action "Ajouter un mot horizontal"
+        JMenuItem ajouterMotHorizontal = new JMenuItem("Ajouter un mot horizontal");
+        ajouterMotHorizontal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String mot = JOptionPane.showInputDialog(frame, "Saisissez votre mot");
+                grille.ajouterMotHorizontal(mot, coordonneeCase.x, coordonneeCase.y);
+                System.out.println("ajouter mot Horizontal");
+                displayGrille();
+            }
+        });
+
         // Action "Ajouter une définition"
         JMenuItem ajouterDef = new JMenuItem("Ajouter une definition");
         ajouterDef.addActionListener(new ActionListener() {
@@ -332,16 +358,6 @@ public class GrilleGraphique{
                 Dir direction = showDialogDirection();
 
                 grille.fromSimpleToDoubleDefinition(uneCaseDefTemp, coordonneeCase, definitionTemp, direction);
-
-
-//                framePopUp.add(new Container());
-//                framePopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//                //Create and set up the content pane.
-//                comboDirection.setOpaque(true); //content panes must be opaque
-//                framePopUp.setContentPane(comboDirection);
-//                framePopUp.pack();
-//                framePopUp.setVisible(true);
 
                 System.out.println("ajouter deuxième def");
                 displayGrille();
@@ -373,6 +389,8 @@ public class GrilleGraphique{
 
         if (enumCase == EnumCase.CASE_VIDE) {
             jPopupMenu.add(ajouterDef);
+            jPopupMenu.add(ajouterMotVertical);
+            jPopupMenu.add(ajouterMotHorizontal);
         } else if (enumCase == EnumCase.CASE_LETTRE) {
             jPopupMenu.add(supprimerLettre);
         } else if (enumCase == EnumCase.CASE_DEFINITION) {
@@ -385,6 +403,28 @@ public class GrilleGraphique{
         return jPopupMenu;
     }
 
+    public String showRegexWord(String[] mots) {
+
+        JComboBox comboMots = new JComboBox(mots);
+
+        //Make sure we have nice window decorations.
+        JFrame.setDefaultLookAndFeelDecorated(true);
+
+        //Create and set up the window.
+        JFrame framePopUp = new JFrame("CustomComboBoxDemo");
+
+        String[] options = {"Ok", "Cancel"};
+
+        int selection = JOptionPane.showOptionDialog(frame, comboMots, "Mots", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options,
+                options[0]);
+
+        if (selection > 0) {
+            System.out.println("selection is: " + options[selection]);
+        }
+
+        Object directionSelected = comboMots.getSelectedItem();
+        return directionSelected.toString();
+    }
 
     public Dir showDialogDirection() {
 
@@ -440,7 +480,6 @@ public class GrilleGraphique{
         } else if ("HI".equals(directionSelected.toString())) {
             return Dir.HORIZONTALINDIRECT;
         }
-        System.out.println("marche po");
         
         return direction;
     }
