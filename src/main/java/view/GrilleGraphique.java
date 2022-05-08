@@ -74,6 +74,11 @@ public class GrilleGraphique{
 
         String sLabel;
 
+        JLabel arrowLabel;
+        JButton jButtonTemp;
+        Dir directionDefTemp = null;
+        String imageName = "";
+
         for (int i = 0; i < grille.getHauteur(); i++) {
             for (int j = 0; j < grille.getLargeur(); j++) {
                 if (this.grille.getTableauDeCases()[j][i] instanceof CaseLettre) {
@@ -81,6 +86,33 @@ public class GrilleGraphique{
                 }
                 else if (this.grille.getTableauDeCases()[j][i] instanceof CaseDefinition caseDefinition) {
                     sLabel = caseDefinition.definition;
+                    directionDefTemp = caseDefinition.direction;
+
+                    switch (directionDefTemp) {
+                        case VERTICALDIRECT -> {
+                            imageName = "arrow_straight_down.png";
+                        }
+                        case HORIZONTALDIRECT -> {
+                            imageName = "arrow_straight_right.png";
+                        }
+                        case VERTICALINDIRECT -> {
+                            imageName = "arrow_right_downward.png";
+                        }
+                        case HORIZONTALINDIRECT -> {
+                            imageName = "arrow_bottom_right";
+                        }
+                    }
+
+                    jButtonTemp = grilleDeBouton[i][j];
+
+
+                    ImageIcon imageIcon = new ImageIcon("images/" + imageName);
+                    Image scaledImage = imageIcon.getImage().getScaledInstance(70, 30, Image.SCALE_SMOOTH) ;
+                    imageIcon = new ImageIcon(scaledImage);
+                    arrowLabel = new JLabel(imageIcon);
+                    jButtonTemp.add(arrowLabel);
+                    grilleDeBouton[i][j] = jButtonTemp;
+
                 }
                 else if (this.grille.getTableauDeCases()[j][i] instanceof CaseDefinitionMultiple caseDefinitionMultiple) {
                     sLabel = "<html>" + caseDefinitionMultiple.definition_1 + "<br /><br />" + caseDefinitionMultiple.definition_2 + "</html>";
@@ -91,6 +123,7 @@ public class GrilleGraphique{
                 else {
                     sLabel = "XX";
                 }
+
 
                 grilleDeBouton[i][j].setText(sLabel);
 
@@ -162,7 +195,8 @@ public class GrilleGraphique{
 
                 String definitionTemp = JOptionPane.showInputDialog(frame, "Saisissez votre définition");
 
-                grille.setCaseAt(new CaseDefinition(coordonneeCase, definitionTemp), coordonneeCase);
+                Dir direction = showDialogDirection();
+                grille.setCaseAt(new CaseDefinition(coordonneeCase, definitionTemp, direction), coordonneeCase);
                 System.out.println("ajouter def");
                 displayGrille();
             }
@@ -186,8 +220,8 @@ public class GrilleGraphique{
 //                framePopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //
 //                //Create and set up the content pane.
-//                directionList.setOpaque(true); //content panes must be opaque
-//                framePopUp.setContentPane(directionList);
+//                comboDirection.setOpaque(true); //content panes must be opaque
+//                framePopUp.setContentPane(comboDirection);
 //                framePopUp.pack();
 //                framePopUp.setVisible(true);
 
@@ -239,10 +273,10 @@ public class GrilleGraphique{
         Dir direction = null;
         ImageIcon[] images;
         String[] imageName = new String[] {"arrow_bottom_right.png", "arrow_straight_down.png", "arrow_straight_right.png", "arrow_right_downward.png"};
-        String[] descriptions = new String[] {"...", "...","...","..."};
+        String[] descriptions = new String[] {"HI", "VD","HD","VI"};
 
 
-        JComboBox directionList = new JComboBox();
+        JComboBox comboDirection = new JComboBox();
 
 
         // Charge les images dans la combobox
@@ -258,9 +292,9 @@ public class GrilleGraphique{
                 images[i].setDescription(descriptions[i]);
             }
 
-            directionList.addItem(images[i]);
+            comboDirection.addItem(images[i]);
         }
-        directionList.setMaximumRowCount(4);
+        comboDirection.setMaximumRowCount(4);
 
         //Make sure we have nice window decorations.
         JFrame.setDefaultLookAndFeelDecorated(true);
@@ -268,8 +302,26 @@ public class GrilleGraphique{
         //Create and set up the window.
         JFrame framePopUp = new JFrame("CustomComboBoxDemo");
 
-        JOptionPane.showInputDialog(frame, directionList, "Direction", JOptionPane.QUESTION_MESSAGE);
+        String[] options = {"Ok", "Cancel"};
 
+        int selection = JOptionPane.showOptionDialog(frame, comboDirection, "Direction", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options,
+                options[0]);
+
+        if (selection > 0) {
+            System.out.println("selection is: " + options[selection]);
+        }
+
+        Object directionSelected = comboDirection.getSelectedItem();
+        if ("VD".equals(directionSelected)) {
+            return Dir.VERTICALDIRECT;
+        } else if ("VI".equals(directionSelected)) {
+            return Dir.VERTICALINDIRECT;
+        } else if ("HD".equals(directionSelected)) {
+            return Dir.HORIZONTALDIRECT;
+        } else if ("HI".equals(directionSelected)) {
+            return Dir.HORIZONTALINDIRECT;
+        }
+        
         return direction;
     }
 
