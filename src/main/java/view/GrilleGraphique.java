@@ -39,11 +39,9 @@ public class GrilleGraphique{
 
 
         // Définition de la Frame
-        frame = new JFrame("Hello World");
+        frame = new JFrame("Mot fleches");
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(grille.getHauteur(), grille.getLargeur()));
-
-
 
 
         frame.setSize(grille.getLargeur() * 120, grille.getHauteur() * 120);
@@ -52,13 +50,13 @@ public class GrilleGraphique{
 
         // Placement des Jlabels
 
-        for (int i = 0; i < grille.getHauteur(); i++) {
-            for (int j = 0; j < grille.getLargeur(); j++) {
+        for (int largeur = 0; largeur < grille.getLargeur(); largeur++) {
+            for (int hauteur = 0; hauteur < grille.getHauteur(); hauteur++) {
 
                 String sLabel = "";
 
-                JButton btn = this.buttonFactory(this, sLabel, i * 40, j * 40, i, j);
-                grilleDeBouton[i][j] = btn;
+                JButton btn = this.buttonFactory(this, sLabel, largeur * 40, hauteur * 40, largeur, hauteur);
+                grilleDeBouton[hauteur][largeur] = btn;
                 panel.add(btn);
             }
         }
@@ -77,14 +75,21 @@ public class GrilleGraphique{
         JLabel arrowLabel;
         JButton jButtonTemp;
         Dir directionDefTemp = null;
+        Dir directionDefTemp_1 = null;
+        Dir directionDefTemp_2 = null;
         String imageName = "";
 
-        for (int i = 0; i < grille.getHauteur(); i++) {
-            for (int j = 0; j < grille.getLargeur(); j++) {
-                if (this.grille.getTableauDeCases()[j][i] instanceof CaseLettre) {
-                    sLabel = ((CaseLettre) this.grille.getTableauDeCases()[j][i]).getLettreString();
+        for (int largeur = 0; largeur < grille.getLargeur(); largeur++) {
+            for (int hauteur = 0; hauteur < grille.getHauteur(); hauteur++) {
+                jButtonTemp = grilleDeBouton[largeur][hauteur];
+                if (this.grille.getTableauDeCases()[largeur][hauteur] instanceof CaseLettre) {
+                    sLabel = ((CaseLettre) this.grille.getTableauDeCases()[largeur][hauteur]).getLettreString();
+                    jButtonTemp.setBorderPainted(true);
+                    jButtonTemp.setFocusPainted(true);
+                    jButtonTemp.setContentAreaFilled(true);
+                    grilleDeBouton[largeur][hauteur] = jButtonTemp;
                 }
-                else if (this.grille.getTableauDeCases()[j][i] instanceof CaseDefinition caseDefinition) {
+                else if (this.grille.getTableauDeCases()[largeur][hauteur] instanceof CaseDefinition caseDefinition) {
                     sLabel = caseDefinition.definition;
                     directionDefTemp = caseDefinition.direction;
 
@@ -103,29 +108,126 @@ public class GrilleGraphique{
                         }
                     }
 
-                    jButtonTemp = grilleDeBouton[i][j];
+                    jButtonTemp = grilleDeBouton[largeur][hauteur];
 
 
                     ImageIcon imageIcon = new ImageIcon("images/" + imageName);
-                    Image scaledImage = imageIcon.getImage().getScaledInstance(70, 30, Image.SCALE_SMOOTH) ;
+
+                    Image scaledImage = null;
+
+                    switch (directionDefTemp) {
+                        case VERTICALDIRECT, HORIZONTALDIRECT -> {
+                            scaledImage = imageIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH) ;
+                        }
+                        case VERTICALINDIRECT, HORIZONTALINDIRECT -> {
+                            scaledImage = imageIcon.getImage().getScaledInstance(70, 30, Image.SCALE_SMOOTH) ;
+                        }
+                    }
+
                     imageIcon = new ImageIcon(scaledImage);
                     arrowLabel = new JLabel(imageIcon);
+                    arrowLabel.setLocation(largeur*40 + 500, hauteur* 40);
                     jButtonTemp.add(arrowLabel);
-                    grilleDeBouton[i][j] = jButtonTemp;
+                    jButtonTemp.setBorderPainted(false);
+                    jButtonTemp.setFocusPainted(false);
+                    jButtonTemp.setContentAreaFilled(false);
+                    grilleDeBouton[largeur][hauteur] = jButtonTemp;
 
                 }
-                else if (this.grille.getTableauDeCases()[j][i] instanceof CaseDefinitionMultiple caseDefinitionMultiple) {
+                else if (this.grille.getTableauDeCases()[largeur][hauteur] instanceof CaseDefinitionMultiple caseDefinitionMultiple) {
                     sLabel = "<html>" + caseDefinitionMultiple.definition_1 + "<br /><br />" + caseDefinitionMultiple.definition_2 + "</html>";
+                    directionDefTemp_1 = caseDefinitionMultiple.direction_1;
+                    directionDefTemp_2 = caseDefinitionMultiple.direction_2;
+
+                    // première icone
+                    switch (directionDefTemp_1) {
+                        case VERTICALDIRECT -> {
+                            imageName = "arrow_straight_down.png";
+                        }
+                        case HORIZONTALDIRECT -> {
+                            imageName = "arrow_straight_right.png";
+                        }
+                        case VERTICALINDIRECT -> {
+                            imageName = "arrow_right_downward.png";
+                        }
+                        case HORIZONTALINDIRECT -> {
+                            imageName = "arrow_bottom_right";
+                        }
+                    }
+                    jButtonTemp = grilleDeBouton[largeur][hauteur];
+                    ImageIcon imageIcon = new ImageIcon("images/" + imageName);
+                    Image scaledImage = null;
+                    switch (directionDefTemp_1) {
+                        case VERTICALDIRECT, HORIZONTALDIRECT -> {
+                            scaledImage = imageIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH) ;
+                        }
+                        case VERTICALINDIRECT, HORIZONTALINDIRECT -> {
+                            scaledImage = imageIcon.getImage().getScaledInstance(70, 30, Image.SCALE_SMOOTH) ;
+                        }
+                    }
+                    imageIcon = new ImageIcon(scaledImage);
+                    arrowLabel = new JLabel(imageIcon);
+
+                    jButtonTemp.setBorderPainted(false);
+                    jButtonTemp.setFocusPainted(false);
+                    jButtonTemp.setContentAreaFilled(false);
+                    jButtonTemp.add(arrowLabel);
+
+
+                    // Deuxième icone
+                    switch (directionDefTemp_2) {
+                        case VERTICALDIRECT -> {
+                            imageName = "arrow_straight_down.png";
+                        }
+                        case HORIZONTALDIRECT -> {
+                            imageName = "arrow_straight_right.png";
+                        }
+                        case VERTICALINDIRECT -> {
+                            imageName = "arrow_right_downward.png";
+                        }
+                        case HORIZONTALINDIRECT -> {
+                            imageName = "arrow_bottom_right";
+                        }
+                    }
+                    jButtonTemp = grilleDeBouton[largeur][hauteur];
+                    imageIcon = new ImageIcon("images/" + imageName);
+                    scaledImage = null;
+                    switch (directionDefTemp_2) {
+                        case VERTICALDIRECT, HORIZONTALDIRECT -> {
+                            scaledImage = imageIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH) ;
+                        }
+                        case VERTICALINDIRECT, HORIZONTALINDIRECT -> {
+                            scaledImage = imageIcon.getImage().getScaledInstance(70, 30, Image.SCALE_SMOOTH) ;
+                        }
+                    }
+                    imageIcon = new ImageIcon(scaledImage);
+                    arrowLabel = new JLabel(imageIcon);
+
+                    jButtonTemp.setBorderPainted(false);
+                    jButtonTemp.setFocusPainted(false);
+                    jButtonTemp.setContentAreaFilled(false);
+                    jButtonTemp.add(arrowLabel);
+                    arrowLabel.setLocation(largeur*40, hauteur* 40);
+
+                    grilleDeBouton[largeur][hauteur] = jButtonTemp;
+
                 }
-                else if (this.grille.getTableauDeCases()[j][i] instanceof CaseVide) {
+                else if (this.grille.getTableauDeCases()[largeur][hauteur] instanceof CaseVide) {
                     sLabel = "";
+                    jButtonTemp.setBorderPainted(true);
+                    jButtonTemp.setFocusPainted(true);
+                    jButtonTemp.setContentAreaFilled(true);
+                    grilleDeBouton[largeur][hauteur] = jButtonTemp;
                 }
                 else {
                     sLabel = "XX";
+                    jButtonTemp.setBorderPainted(true);
+                    jButtonTemp.setFocusPainted(true);
+                    jButtonTemp.setContentAreaFilled(true);
+                    grilleDeBouton[largeur][hauteur] = jButtonTemp;
                 }
 
-
-                grilleDeBouton[i][j].setText(sLabel);
+                grilleDeBouton[largeur][hauteur].setText(sLabel);
 
             }
         }
@@ -156,20 +258,36 @@ public class GrilleGraphique{
         Case[][] grilleTemp = this.grille.getTableauDeCases();
         btn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                JPopupMenu varJPopupMenu;
+                JPopupMenu varJPopupMenu = new JPopupMenu();
                 System.out.printf("Je suis en " + caseX + ":" + caseY);
                 Case laCase = grilleTemp[caseY][caseX];
 
+                if (e.getButton() == MouseEvent.BUTTON1 && laCase instanceof CaseVide caseTemp) {
+                    String lettreTemp = null;
+                    boolean inputIsCorrect = false;
+                    while (!inputIsCorrect) {
+                        lettreTemp = JOptionPane.showInputDialog("Saisissez une lettre");
+                        if (lettreTemp.length() == 1) {
+                            inputIsCorrect = true;
+                        }
+                    }
+                    grille.grille.setCaseAt(new CaseLettre(new Coordonnee(caseY, caseX), lettreTemp.charAt(0)), new Coordonnee(caseY, caseX));
+                    displayGrille();
 
-                if (laCase instanceof CaseVide) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_VIDE, laCase, caseX, caseY);
-                } else if (laCase instanceof CaseLettre) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_LETTRE, laCase, caseX, caseY);
-                } else if (laCase instanceof CaseDefinition) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION, laCase, caseX, caseY);
+
                 } else {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION_MULTIPLE, laCase, caseX, caseY);
+                    if (laCase instanceof CaseVide) {
+                        varJPopupMenu = createContextualMenu(EnumCase.CASE_VIDE, laCase, caseX, caseY);
+                    } else if (laCase instanceof CaseLettre) {
+                        varJPopupMenu = createContextualMenu(EnumCase.CASE_LETTRE, laCase, caseX, caseY);
+                    } else if (laCase instanceof CaseDefinition) {
+                        varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION, laCase, caseX, caseY);
+                    } else {
+                        varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION_MULTIPLE, laCase, caseX, caseY);
+                    }
                 }
+
+
 
                 menuContextuel = varJPopupMenu;
                 menuContextuel.show(e.getComponent(), e.getX(), e.getY());
@@ -185,32 +303,6 @@ public class GrilleGraphique{
     private JPopupMenu createContextualMenu(EnumCase enumCase, Case uneCase, int x, int y) {
         JPopupMenu jPopupMenu = new JPopupMenu();
         Coordonnee coordonneeCase = new Coordonnee(y, x);
-
-        // Action "Ajouter un mot verticale"
-        JMenuItem ajouterMotVertical = new JMenuItem("Ajouter un mot verticale");
-        ajouterMotVertical.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String mot = JOptionPane.showInputDialog(frame, "Saisissez votre mot");
-                grille.ajouterMotVertical(mot, coordonneeCase.x, coordonneeCase.y);
-                System.out.println("ajouter mot Vertical");
-                displayGrille();
-            }
-        });
-
-        // Action "Ajouter un mot horizontal"
-        JMenuItem ajouterMotHorizontal = new JMenuItem("Ajouter un mot horizontal");
-        ajouterMotHorizontal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String mot = JOptionPane.showInputDialog(frame, "Saisissez votre mot");
-                grille.ajouterMotHorizontal(mot, coordonneeCase.x, coordonneeCase.y);
-                System.out.println("ajouter mot Horizontal");
-                displayGrille();
-            }
-        });
 
         // Action "Ajouter une définition"
         JMenuItem ajouterDef = new JMenuItem("Ajouter une definition");
@@ -251,7 +343,7 @@ public class GrilleGraphique{
 //                framePopUp.pack();
 //                framePopUp.setVisible(true);
 
-                System.out.println("ajouter def");
+                System.out.println("ajouter deuxième def");
                 displayGrille();
             }
         });
@@ -281,8 +373,6 @@ public class GrilleGraphique{
 
         if (enumCase == EnumCase.CASE_VIDE) {
             jPopupMenu.add(ajouterDef);
-            jPopupMenu.add(ajouterMotVertical);
-            jPopupMenu.add(ajouterMotHorizontal);
         } else if (enumCase == EnumCase.CASE_LETTRE) {
             jPopupMenu.add(supprimerLettre);
         } else if (enumCase == EnumCase.CASE_DEFINITION) {
@@ -340,18 +430,19 @@ public class GrilleGraphique{
         }
 
         Object directionSelected = comboDirection.getSelectedItem();
-        if ("VD".equals(directionSelected)) {
-            return Dir.VERTICALDIRECT;
-        } else if ("VI".equals(directionSelected)) {
-            return Dir.VERTICALINDIRECT;
-        } else if ("HD".equals(directionSelected)) {
-            return Dir.HORIZONTALDIRECT;
-        } else if ("HI".equals(directionSelected)) {
-            return Dir.HORIZONTALINDIRECT;
-        }else {
-            return direction;
-        }
 
+        if ("VD".equals(directionSelected.toString())) {
+            return Dir.VERTICALDIRECT;
+        } else if ("VI".equals(directionSelected.toString())) {
+            return Dir.VERTICALINDIRECT;
+        } else if ("HD".equals(directionSelected.toString())) {
+            return Dir.HORIZONTALDIRECT;
+        } else if ("HI".equals(directionSelected.toString())) {
+            return Dir.HORIZONTALINDIRECT;
+        }
+        System.out.println("marche po");
+        
+        return direction;
     }
 
 
