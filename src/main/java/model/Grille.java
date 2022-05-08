@@ -284,7 +284,7 @@ public class Grille implements I_modeleGrille {
      * @param uneCase
      * @return
      */
-    public boolean deleteCaseAt(Case uneCase, Coordonnee coordonnee) {
+    public boolean deleteCaseAt(Coordonnee coordonnee) {
         CaseVide caseVide = new CaseVide();
         setCaseAt(caseVide, coordonnee);
         return true;

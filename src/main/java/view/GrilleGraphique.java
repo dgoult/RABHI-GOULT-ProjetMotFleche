@@ -128,13 +128,13 @@ public class GrilleGraphique{
 
 
                 if (laCase instanceof CaseVide) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_VIDE);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_VIDE, laCase, x, y);
                 } else if (laCase instanceof CaseLettre) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_LETTRE);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_LETTRE, laCase, x, y);
                 } else if (laCase instanceof CaseDefinition) {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION, laCase, x, y);
                 } else {
-                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION_MULTIPLE);
+                    varJPopupMenu = createContextualMenu(EnumCase.CASE_DEFINITION_MULTIPLE, laCase, x, y);
                 }
 
                 menuContextuel = varJPopupMenu;
@@ -148,8 +148,9 @@ public class GrilleGraphique{
         return btn;
     }
 
-    private JPopupMenu createContextualMenu(EnumCase enumCase) {
+    private JPopupMenu createContextualMenu(EnumCase enumCase, Case uneCase, int x, int y) {
         JPopupMenu jPopupMenu = new JPopupMenu();
+        Coordonnee coordonneeCase = new Coordonnee(y, x);
 
         // Action "Ajouter une définition"
         JMenuItem ajouterDef = new JMenuItem("Ajouter une definition");
@@ -158,6 +159,7 @@ public class GrilleGraphique{
             public void actionPerformed(ActionEvent e) {
                 // TODO supprimerDef de Dylan
                 System.out.println("ajouter def");
+                displayGrille();
             }
         });
 
@@ -165,14 +167,18 @@ public class GrilleGraphique{
         supprimerDef.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                grille.deleteCaseAt(coordonneeCase);
                 System.out.println("Supprimer def");
+                displayGrille();
             }
         });
 
         JMenuItem supprimerLettre = new JMenuItem("Supprimer la lettre");
-        supprimerDef.addActionListener(new ActionListener() {
+        supprimerLettre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                grille.deleteCaseAt(coordonneeCase);
+                displayGrille();
                 System.out.println("Sup case");
             }
         });
