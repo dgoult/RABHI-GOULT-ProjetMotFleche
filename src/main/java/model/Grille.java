@@ -20,9 +20,9 @@ public class Grille implements I_modeleGrille {
 
     /**
      * Permet d'initialiser la grille avec une hauteur et une largeur
-     * @param hauteur
-     * @param largeur
-     * @return
+     * @param hauteur (int)
+     * @param largeur (int)
+     * @return boolean
      */
     public boolean initGrille(int hauteur, int largeur) {
         if (hauteur > MAX_HAUTEUR || largeur > MAX_LARGEUR || hauteur <= 0 || largeur <= 0) {
@@ -287,6 +287,18 @@ public class Grille implements I_modeleGrille {
     public boolean deleteCaseAt(Coordonnee coordonnee) {
         CaseVide caseVide = new CaseVide();
         setCaseAt(caseVide, coordonnee);
+        return true;
+    }
+
+
+    public boolean setDoubleDefinitionAt(Case uneCase, Coordonnee coordonnee) {
+        this.grilleDeCases[coordonnee.x][coordonnee.y] = uneCase;
+        return true;
+    }
+
+    public boolean fromSimpleToDoubleDefinition(CaseDefinition uneCase, Coordonnee coordonnee, String secondDefinition, Dir direction_2) {
+        CaseDefinitionMultiple caseDefinitionMultiple = new CaseDefinitionMultiple(coordonnee, uneCase.definition, secondDefinition, uneCase.direction, direction_2);
+        setCaseAt(caseDefinitionMultiple, coordonnee);
         return true;
     }
 

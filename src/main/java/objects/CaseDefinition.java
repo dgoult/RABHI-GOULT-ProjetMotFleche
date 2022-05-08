@@ -6,7 +6,7 @@ public class CaseDefinition extends Case {
 
     public Dir direction;
     Coordonnee coordonnee;
-    String definition;
+    public String definition;
     public Mot mot;
 
     public CaseDefinition() {}
