@@ -12,7 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.Objects;
 
 public class GrilleGraphique{
 
@@ -259,7 +261,7 @@ public class GrilleGraphique{
         btn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 JPopupMenu varJPopupMenu = new JPopupMenu();
-                System.out.printf("Je suis en " + caseX + ":" + caseY);
+                System.out.printf("Je suis en " + caseY + ":" + caseX);
                 Case laCase = grilleTemp[caseY][caseX];
 
                 if (e.getButton() == MouseEvent.BUTTON1 && laCase instanceof CaseVide caseTemp) {
@@ -386,11 +388,55 @@ public class GrilleGraphique{
             }
         });
 
+        // Action trouver un mot
+        JMenuItem trouver_un_mot = new JMenuItem("Trouver un mot");
+        trouver_un_mot.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String[] direction = new String[] {"Horizontal", "Vertical"};
+                JComboBox comboDirectionMot = new JComboBox(direction);
+
+                JFrame.setDefaultLookAndFeelDecorated(true);
+                JFrame framePopUp = new JFrame("CustomComboBoxDemo");
+
+                String[] options = {"Ok", "Cancel"};
+
+                int selection = JOptionPane.showOptionDialog(frame, comboDirectionMot, "Mots", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options,
+                        options[0]);
+
+                if (selection > 0) {
+                    System.out.println("selection is: " + options[selection]);
+                }
+
+                String directionChoisie = comboDirectionMot.getSelectedItem().toString();
+
+                ArrayList<String> words = new ArrayList<String>();
+
+                String motChoisi;
+
+                if (Objects.equals(directionChoisie, "Horizontal")) {
+                    words = grille.findWord(coordonneeCase.x, coordonneeCase.y, Dir.HORIZONTALDIRECT);
+                    motChoisi = showRegexWord(words);
+                    grille.ajouterMotHorizontal(motChoisi,  coordonneeCase.x, y);
+                } else {
+                    words = grille.findWord( coordonneeCase.x, coordonneeCase.y, Dir.VERTICALDIRECT);
+                    motChoisi = showRegexWord(words);
+                    grille.ajouterMotVertical(motChoisi,  coordonneeCase.x,  coordonneeCase.y);
+                }
+
+
+                displayGrille();
+                System.out.println("Sup case");
+            }
+        });
+
 
         if (enumCase == EnumCase.CASE_VIDE) {
             jPopupMenu.add(ajouterDef);
             jPopupMenu.add(ajouterMotVertical);
             jPopupMenu.add(ajouterMotHorizontal);
+            jPopupMenu.add(trouver_un_mot);
         } else if (enumCase == EnumCase.CASE_LETTRE) {
             jPopupMenu.add(supprimerLettre);
         } else if (enumCase == EnumCase.CASE_DEFINITION) {
@@ -403,9 +449,9 @@ public class GrilleGraphique{
         return jPopupMenu;
     }
 
-    public String showRegexWord(String[] mots) {
+    public String showRegexWord(ArrayList<String> mots) {
 
-        JComboBox comboMots = new JComboBox(mots);
+        JComboBox comboMots = new JComboBox(mots.toArray());
 
         //Make sure we have nice window decorations.
         JFrame.setDefaultLookAndFeelDecorated(true);
