@@ -186,6 +186,32 @@ public class GrilleGraphique{
         JPopupMenu jPopupMenu = new JPopupMenu();
         Coordonnee coordonneeCase = new Coordonnee(y, x);
 
+        // Action "Ajouter un mot verticale"
+        JMenuItem ajouterMotVertical = new JMenuItem("Ajouter un mot verticale");
+        ajouterMotVertical.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String mot = JOptionPane.showInputDialog(frame, "Saisissez votre mot");
+                grille.ajouterMotVertical(mot, coordonneeCase.x, coordonneeCase.y);
+                System.out.println("ajouter mot Vertical");
+                displayGrille();
+            }
+        });
+
+        // Action "Ajouter un mot horizontal"
+        JMenuItem ajouterMotHorizontal = new JMenuItem("Ajouter un mot horizontal");
+        ajouterMotHorizontal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String mot = JOptionPane.showInputDialog(frame, "Saisissez votre mot");
+                grille.ajouterMotHorizontal(mot, coordonneeCase.x, coordonneeCase.y);
+                System.out.println("ajouter mot Horizontal");
+                displayGrille();
+            }
+        });
+
         // Action "Ajouter une définition"
         JMenuItem ajouterDef = new JMenuItem("Ajouter une definition");
         ajouterDef.addActionListener(new ActionListener() {
@@ -255,6 +281,8 @@ public class GrilleGraphique{
 
         if (enumCase == EnumCase.CASE_VIDE) {
             jPopupMenu.add(ajouterDef);
+            jPopupMenu.add(ajouterMotVertical);
+            jPopupMenu.add(ajouterMotHorizontal);
         } else if (enumCase == EnumCase.CASE_LETTRE) {
             jPopupMenu.add(supprimerLettre);
         } else if (enumCase == EnumCase.CASE_DEFINITION) {
@@ -320,9 +348,10 @@ public class GrilleGraphique{
             return Dir.HORIZONTALDIRECT;
         } else if ("HI".equals(directionSelected)) {
             return Dir.HORIZONTALINDIRECT;
+        }else {
+            return direction;
         }
-        
-        return direction;
+
     }
 
 
